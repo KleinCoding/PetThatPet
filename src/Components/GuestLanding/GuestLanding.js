@@ -10,6 +10,7 @@ import {
 import { Card } from "../Particles/Particles";
 import Login from "../Login/Login"
 import Register from "../Register/Register"
+import "../../Styles/transition.css"
 
 export default function GuestLanding(props) {
   return (
@@ -36,7 +37,7 @@ export default function GuestLanding(props) {
       </div>
       <div className="column">
           <div className="container">
-            <div className="row">
+            <div className="row" class="ld ld-slide-ttb-in" >
       <Card>
         <Login />
         </Card>

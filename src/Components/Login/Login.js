@@ -7,13 +7,16 @@ function Login() {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
 
+  
   const handleLogin = evt => {
-    console.log("Logging in", username, password);
+    console.log("Logging in", username);
     dispatch(loginUser({ username, password }));
   };
 
   return (
+    
     <form onSubmit={handleLogin}>
+      
       <input
         name="username"
         placeholder="Username"

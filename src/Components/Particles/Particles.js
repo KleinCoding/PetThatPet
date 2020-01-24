@@ -7,21 +7,19 @@ import { useSelector, useDispatch } from "react-redux";
 import { getAllRatingsByUserId } from "../../reducks/reducers/ratingsReducer";
 import Ellipsis from "../Loading/Loading";
 import { ReactQueryConfigProvider } from "react-query";
-import Login from "../Login/Login"
-import Register from "../Register/Register"
+import Login from "../Login/Login";
+import Register from "../Register/Register";
+import GuestLanding from "../GuestLanding/GuestLanding";
 
 const queryConfig = {
   suspense: true
 };
 
- 
-  
 export default function ParticleBox() {
   //Defines variables for Randomizer function for post display
   const [variables, setVariables] = useState({ a: 3, b: 4, c: 5 });
   //Defines View and function to setView
-  const [view, setView] = useState("login")
-
+  const [view, setView] = useState("landing");
 
   //Defines the dispatch function
   const dispatch = useDispatch();
@@ -35,34 +33,28 @@ export default function ParticleBox() {
   useEffect(() => {
     const ratingsByUserId = dispatch(getAllRatingsByUserId(currentUser_id));
   }, []);
-  
-//Determines view to load for user based on view variable defined above
- function GetView(view) {
-    if (view === 'login') {
-      return viewLogin()
-    }
-    else if (view === 'profile') {
-      return <div>Profile Page</div>
+
+  //Determines view to load for user based on view variable defined above
+  function GetView(view) {
+    if (view === "landing") {
+      return viewLanding();
+    } else if (view === "login") {
+      return viewLogin();
+    } else if (view === "profile") {
+      return <div>Profile Page</div>;
     } else {
-      return viewPost({ variables })
+      return viewPost({ variables });
     }
   }
 
-
-//Displays particle box with a full screen Hero container then calls
-//getView function, passing in current view Variable to return correct view
+  //Displays particle box with a full screen Hero container then calls
+  //getView function, passing in current view Variable to return correct view
   return (
-    <div className="main">
+    <div className ="main">
       <main>
-        <Particles>
-          <Hero>
-            <div className="container">
-              <div className="row">{GetView(view)}</div>
-            </div>
-          </Hero>
-        </Particles>
-      </main>
-    </div>
+        <Hero>{GetView(view)}</Hero>
+      </main></div>
+    
   );
 
   function useRandomize() {
@@ -73,80 +65,100 @@ export default function ParticleBox() {
     });
   }
 
+  function viewLanding() {
+    return (
+    <div className ="LandingHolder">
+    <GuestLanding />
+    </div>);
+  }
+
+  function viewLogin() {
+    return (
+      <Particles>
+        <Hero>
+      
+     
+      <div className="container">
+        
+      <div className="row">
+         <div className="column">
+        {/* <Hero3> */}
+        <Card>
+          <Login />
+        </Card>
+        {/* </Hero3> */}
+        <Hero2 />
+
+        {/* <Card>
+            </Card> */}
+        <Hero2 />
+        {/* <Hero3> */}
+        <Card>
+          <Register />
+        </Card>
+        {/* </Hero3> */}
+        <Hero2 />
+      </div>
+      </div>
+      </div>
+       </Hero>
+       </Particles>
+     
+    );
+  }
+
   function viewPost() {
     return (
       <div className="column">
-        <Card>
-          <div className="postCard">
-            <h1>Give some pets to {posts[variables.a].pet_name}!</h1>
-            <h2>
-              {posts[variables.a].pet_name}'s Human goes by{" "}
-              {posts[variables.a].username}{" "}
-            </h2>
-            <h3>{posts[variables.a].pet_name} has been petted X times</h3>
+        <Particles>
+          <div className="container">
+            <div className="row">
+              <Card>
+                <div className="postCard">
+                  <h1>Give some pets to {posts[variables.a].pet_name}!</h1>
+                  <h2>
+                    {posts[variables.a].pet_name}'s Human goes by{" "}
+                    {posts[variables.a].username}{" "}
+                  </h2>
+                  <h3>{posts[variables.a].pet_name} has been petted X times</h3>
+                </div>
+                <button onClick={useRandomize}>Clicketh Me!</button>
+              </Card>
+              <Hero2 />
+              <Card>
+                <Fragment>
+                  <ReactQueryConfigProvider config={queryConfig}>
+                    <React.Suspense
+                      fallback={
+                        <div>
+                          <Ellipsis />
+                        </div>
+                      }
+                    >
+                      {isLoading ? (
+                        <div>
+                          <Ellipsis />
+                        </div>
+                      ) : (
+                        <img
+                          className="postcardimg"
+                          src={posts[variables.a].img_url}
+                          alt="pet"
+                        ></img>
+                      )}
+                    </React.Suspense>
+                  </ReactQueryConfigProvider>
+                </Fragment>
+              </Card>
+            </div>
           </div>
-          <button onClick={useRandomize}>Clicketh Me!</button>
-        </Card>
-        <Hero2 />
-        <Card>
-          <Fragment>
-            <ReactQueryConfigProvider config={queryConfig}>
-              <React.Suspense
-                fallback={
-                  <div>
-                    <Ellipsis />
-                  </div>
-                }
-              >
-                {isLoading ? (
-                  <div>
-                    <Ellipsis />
-                  </div>
-                ) : (
-                  <img
-                    className="postcardimg"
-                    src={posts[variables.a].img_url}
-                    alt="pet"
-                  ></img>
-                )}
-              </React.Suspense>
-            </ReactQueryConfigProvider>
-          </Fragment>
-        </Card>
+        </Particles>
       </div>
     );
   }
 }
 
-
-function viewLogin() {
-  return (
-    <div className="column">
-                <Card>
-            <Login/>
-          </Card>
-         
-        <Hero2 />
-        
-          {/* <Card>
-          </Card> */}
-          <Hero2 />
-          <Card>
-           <Register/>
-          </Card>
-          <Hero2 />
-    </div>
-  );
-}
-
-// function useLanding() {
-//   return {
-
-//   }
-// }
-
-
-function Card({ children }) {
+export function Card({ children }) {
   // We add this ref to card element and use in onMouseMove event ...
   // ... to get element's offset and dimensions.
   const ref = useRef();
@@ -218,7 +230,7 @@ function Card({ children }) {
 
 function Particles({ children, props }) {
   return (
-    <div className="actualParticles" style={{ position: "relative" }}>
+    <div className="actualParticles" >
       <ReactParticles
         params={particlesConfig}
         style={{
@@ -247,6 +259,14 @@ function Hero2({ children }) {
   return (
     <div className="hero2">
       <div className="hero-body2">{children}</div>
+    </div>
+  );
+}
+
+function Hero3({ children }) {
+  return (
+    <div className="hero3">
+      <div className="hero-body3">{children}</div>
     </div>
   );
 }
@@ -280,30 +300,3 @@ function Hero2({ children }) {
 //     </div>
 //   );
 // }
-
-// const cards = [
-//   {
-//     title: "Build faster ⚡️",
-//     description:
-//       "Create a React web app in the fraction of the time using our library of themes and building blocks. We have everything from navbars and content grids to authentication flows and commenting systems. New blocks are added every week.",
-//     image: "https://6jlvz1j5q3.csb.app/undraw_collection.svg",
-//     imageRatio: 784 / 1016
-//   },
-//   {
-//     title: "Tweak anything 👩‍🎨",
-//     description:
-//       "Built with developers in mind. Change element structure, edit CSS, create components, add props and state. We give you access to the underlying React code so you can do what you need right in our tool.",
-//     image: "https://6jlvz1j5q3.csb.app/undraw_upload.svg",
-//     imageRatio: 839 / 1133
-//   },
-//   {
-//     title: "Export your code 🚀",
-//     description:
-//       "Export your project as a high-quality React codebase. We're lazer focused on helping you build and iterate quickly, but expect that you'll eventually want to export and wrap things up in your favorite code editor.",
-//     image: "https://6jlvz1j5q3.csb.app/undraw_static_assets.svg",
-//     imageRatio: 730 / 1030
-//   }
-// ];
-
-// const rootElement = document.getElementById('root');
-// ReactDOM.render(<ParticleBox />, rootElement);

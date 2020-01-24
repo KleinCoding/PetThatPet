@@ -2,7 +2,6 @@ import React, { useState, useRef } from "react";
 import { useSpring, animated } from "react-spring";
 import ReactParticles from "react-particles-js";
 import particlesConfig from "./particles-config.js";
-import "./stylesLanding.scss";
 import Login from "../Login/Login"
 import Register from "../Register/Register"
 import "../../Styles/transition.css"

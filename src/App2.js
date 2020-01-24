@@ -45,8 +45,9 @@ console.log(
   console.log("Logged in?", loggedIn);
   return (
     <div className="App">
-      <NavBar />
-      {loggedIn ? (
+  
+      <div><Particles /></div>
+      {/* {loggedIn ? (
         
         <div>
           
@@ -66,7 +67,7 @@ console.log(
             ratingState={ratingState}
           />
         </div>
-      )}
+      )} */}
     </div>
   );
 }

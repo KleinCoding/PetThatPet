@@ -3,19 +3,25 @@ import { useSpring, animated } from "react-spring";
 import ReactParticles from "react-particles-js";
 import particlesConfig from "./particles-config.js";
 import "./stylesDisplay.scss";
-// import PostCard from "../PostCard/PostCardStateless";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllRatingsByUserId } from "../../reducks/reducers/ratingsReducer";
 import Ellipsis from "../Loading/Loading";
 import { ReactQueryConfigProvider } from "react-query";
+import Login from "../Login/Login"
+import Register from "../Register/Register"
 
 const queryConfig = {
   suspense: true
 };
 
+ 
+  
 export default function ParticleBox() {
   //Defines variables for Randomizer function for post display
   const [variables, setVariables] = useState({ a: 3, b: 4, c: 5 });
+  //Defines View and function to setView
+  const [view, setView] = useState("login")
+
 
   //Defines the dispatch function
   const dispatch = useDispatch();
@@ -29,15 +35,29 @@ export default function ParticleBox() {
   useEffect(() => {
     const ratingsByUserId = dispatch(getAllRatingsByUserId(currentUser_id));
   }, []);
+  
+//Determines view to load for user based on view variable defined above
+ function GetView(view) {
+    if (view === 'login') {
+      return viewLogin()
+    }
+    else if (view === 'profile') {
+      return <div>Profile Page</div>
+    } else {
+      return viewPost({ variables })
+    }
+  }
 
 
+//Displays particle box with a full screen Hero container then calls
+//getView function, passing in current view Variable to return correct view
   return (
     <div className="main">
       <main>
         <Particles>
           <Hero>
             <div className="container">
-              <div className="row">{usePostProps({ variables })}</div>
+              <div className="row">{GetView(view)}</div>
             </div>
           </Hero>
         </Particles>
@@ -53,7 +73,7 @@ export default function ParticleBox() {
     });
   }
 
-  function usePostProps() {
+  function viewPost() {
     return (
       <div className="column">
         <Card>
@@ -66,7 +86,6 @@ export default function ParticleBox() {
             <h3>{posts[variables.a].pet_name} has been petted X times</h3>
           </div>
           <button onClick={useRandomize}>Clicketh Me!</button>
-          {/* <PostCard i={variables.a} posts ={posts}/> */}
         </Card>
         <Hero2 />
         <Card>
@@ -98,6 +117,34 @@ export default function ParticleBox() {
     );
   }
 }
+
+
+function viewLogin() {
+  return (
+    <div className="column">
+                <Card>
+            <Login/>
+          </Card>
+         
+        <Hero2 />
+        
+          {/* <Card>
+          </Card> */}
+          <Hero2 />
+          <Card>
+           <Register/>
+          </Card>
+          <Hero2 />
+    </div>
+  );
+}
+
+// function useLanding() {
+//   return {
+
+//   }
+// }
+
 
 function Card({ children }) {
   // We add this ref to card element and use in onMouseMove event ...

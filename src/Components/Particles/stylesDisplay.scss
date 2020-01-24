@@ -3,6 +3,22 @@
   // display: flex;
 }
 
+.my-node-enter {
+  opacity: 0;
+}
+.my-node-enter-active {
+  opacity: 1;
+  transition: opacity 200ms;
+}
+.my-node-exit {
+  opacity: 1;
+}
+.my-node-exit-active {
+  opacity: 0;
+  transition: opacity 200ms;
+}
+
+
 html,
 body {
   height: 100%;
@@ -185,9 +201,6 @@ body {
     padding-bottom: 30px;
   }
 
-  img {
-    width: 100%;
-  }
 }
 
 .image-inner-container {
@@ -213,8 +226,6 @@ body {
 
 .postcardimg {
 	height: 300px;
-	/* width: 50%; */
-	/* width: auto !important; */
 	width: 400px;
 	@media screen and (max-width: 600px) {
 		height: 150px;

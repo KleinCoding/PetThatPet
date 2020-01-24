@@ -1,83 +1,68 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef} from "react";
 import { useSpring, animated } from "react-spring";
 import ReactParticles from "react-particles-js";
 import particlesConfig from "./particles-config.js";
-import "./stylesLanding.scss";
-import Login from "../Login/Login"
-import Register from "../Register/Register"
-import "../../Styles/transition.css"
-import {CSSTransition} from 'react-transition-group';
+import "./stylesDisplay.scss";
+import ReactDOM from "react-dom";
+import { Transition } from "react-transition-group";
+import styled from "styled-components";
 
-export default function ParticlesLanding({show}) {
-  // const [show, setShow] = useState();
+
+const H1 = styled.h1`
+  transition: 0.2s;
+  /* Hidden init state */
+  opacity: 0;
+  transform: translateY(-10px);
+  &.enter,
+  &.entered {
+    /* Animate in state */
+    opacity: 1;
+    transform: translateY(0px);
+  }
+  &.exit,
+  &.exited {
+    /* Animate out state */
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+`;
+
+
+
+export default function ParticleBox() {
+
+  const [show, changeShow] = useState(false);
+  const [inProp, setInProp] = useState(false);
+  const onClick = () => {
+    changeShow(prev => {
+      return !prev;
+    });
+  };
   
-
   return (
-  <CSSTransition classes="parentComponent-child" in={show} timeout={700}>
     <div className="main">
-      <main>
         <Particles>
           <Hero>
-          
-            <div className="container">
-              <div className="row">{usePostProps()}</div>
-            </div> 
-          
-          </Hero> 
-        </Particles> 
-      </main>
-    </div>  
-    </CSSTransition>
+          </Hero>
+        </Particles>
+    </div>
   );
 
 
-  
-  function usePostProps() {
-    return (
-      <div className="column">
-      
-          <Card>
-            <Login/>
-          </Card>
-
-        <Hero2 />
-
-          {/* <Card>
-          </Card> */}
-
-          <Hero2 />
-
-          <Card>
-           <Register/>
-          </Card>
-
-          <Hero2 />
-      </div>
-    );
-  }
 }
 
-function Card({ children }) {
-  // We add this ref to card element and use in onMouseMove event ...
-  // ... to get element's offset and dimensions.
+
+
+export function  Card ({ children }) {
+
   const ref = useRef();
-
-  // Keep track of whether card is hovered so we can increment ...
-  // ... zIndex to ensure it shows up above other cards when animation causes overlap.
   const [isHovered, setHovered] = useState(false);
-
   const [animatedProps, setAnimatedProps] = useSpring(() => {
     return {
-      // Array containing [rotateX, rotateY, and scale] values.
-      // We store under a single key (xys) instead of separate keys ...
-      // ... so that we can use animatedProps.xys.interpolate() to ...
-      // ... easily generate the css transform value below.
       xys: [0, 0, 1],
-      // Setup physics
       config: { mass: 10, tension: 400, friction: 40, precision: 0.00001 }
     };
   });
-
   return (
     <animated.div
       ref={ref}
@@ -127,9 +112,9 @@ function Card({ children }) {
   );
 }
 
-function Particles({ children }) {
+function Particles({ children, props }) {
   return (
-    <div className = "actualParticles" style={{ position: "relative" }}>
+    <div className="actualParticles" style={{ position: "relative" }}>
       <ReactParticles
         params={particlesConfig}
         style={{
@@ -146,7 +131,7 @@ function Particles({ children }) {
   );
 }
 
-function Hero({ children }) {
+export function Hero({ children }) {
   return (
     <div className="hero">
       <div className="hero-body">{children}</div>

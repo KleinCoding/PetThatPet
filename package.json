@@ -5,9 +5,11 @@
   "main": "server/index.js",
   "proxy": "http://localhost:4050",
   "dependencies": {
+    "@loadingio/transition.css": "^2.0.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^7.2.1",
+    "@types/react-transition-group": "^4.2.3",
     "aws-s3": "^2.0.5",
     "aws-sdk": "^2.608.0",
     "axios": "^0.19.1",
@@ -38,7 +40,8 @@
     "react-star-rating": "^1.4.2",
     "react-sticky-footer": "0.1.0-rc3",
     "redux": "^4.0.5",
-    "redux-promise-middleware": "^6.1.2"
+    "redux-promise-middleware": "^6.1.2",
+    "styled-components": "^5.0.0"
   },
   "scripts": {
     "start": "react-scripts start",

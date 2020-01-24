@@ -1,27 +1,39 @@
-import React, { Component } from 'react';
-import Login from "../Login/Login";
-import Register from "../Register/Register";
+import React from 'react';
+import './Landing.scss'
+import CatPaw3 from "../../Styles/SVG/Icons/catpaw3"
+import {LogoSwimming, LogoPowerOn, LogoFloatOut} from "../../Styles/SVG/Logos/Logos"
 
-class GuestLanding extends Component {
-  constructor() {
-    super();
-    this.state = {
 
-    }
-  }
-
-  render() {
+ 
+export default function GuestLanding(props) {
+ 
     return (
+       <span id="svgbkg">
+         <div>
+     
+  
       <div>
       <h1>Welcome to PawVotes!</h1> 
-      Welcome Back!
-      <Login />
-      New User? Please register below!
-      <Register />
-     
+      <div>
+       
+     <CatPaw3 height= "10em" width ="auto" />
+     <div className ="SwimmingLogo">
+     <LogoSwimming width={1000} height={200} />
+     </div>
+
+     <LogoPowerOn />
+     <LogoFloatOut />
+     </div>
+     <div>
+    
+    </div>
+     <div>
+    
+    </div>
       </div>
+       </div>
+    </span>
     )
-  }
+
 }
 
-export default GuestLanding;

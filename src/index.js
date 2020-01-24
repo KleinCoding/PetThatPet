@@ -12,8 +12,9 @@ import routes from './routes'
 ReactDOM.render(
   <Provider store={store}>
     <HashRouter>
-      
+  
       {routes}
+         
     </HashRouter>
   </Provider>
   , document.getElementById('root'));

@@ -9,7 +9,7 @@
     background-repeat: repeat;
     background-image: url(../../Styles/SVG/Backgrounds/paw1.svg); 
     flex-wrap: wrap;
-    text-align-last: center;
+    // text-align-last: center;
     @media screen and (max-width: 600px) {
         background-image: url(../../Styles/SVG/Backgrounds/heart1.svg); 
         background-size: 60%;
@@ -31,7 +31,8 @@
         justify-content: center;
 }
 }
-.catPawSVG{
+.landingIconHolder{
+    width: 50vw;
     @media screen and (max-width: 600px){
         height: 6em;
         width: auto;
@@ -71,3 +72,4 @@
 .spacer1{
     width: 15vw;
 }
+

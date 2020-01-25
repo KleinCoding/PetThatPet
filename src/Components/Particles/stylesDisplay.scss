@@ -4,7 +4,6 @@
 }
 
 
-
 html,
 body {
   height: 100%;
@@ -144,7 +143,7 @@ body {
   flex-direction: column;
   justify-self: center;
   max-width: 1200px;
-  width: 100%;
+  // width: 100%;
   margin: 0 auto;
   overflow-wrap: normal;
   justify-content: space-around;
@@ -169,7 +168,7 @@ body {
   display: flex;
   flex: 0 0 auto;
   padding: 10px;
-  width: 100%;
+  // width: 100%;
   flex: auto;
   margin: auto;
   @media screen and (min-width: 980px) {

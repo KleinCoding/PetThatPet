@@ -9,14 +9,24 @@ import {
   LogoWelcomeBackLarge
 } from "../../Styles/SVG/Logos/Logos";
 import { Card } from "../Particles/Particles";
+import { Card2 } from "../Particles/ParticlesEMPTY";
 import Login from "../Login/Login";
 import Register from "../Register/Register";
 import "../../Styles/transition.css";
 import "../../Styles/loading.css";
-import { useInterval } from "../../Hooks/Hooks";
+import { useInterval, useInterval2 } from "../../Hooks/Hooks";
+
+//Force Reflow
+try {
+  var forceReflowJS = (forceReflowJS = function(a) {
+    "use strict";
+    void a.offsetHeight;
+  }).call.bind(
+    Object.getOwnPropertyDescriptor(HTMLElement.prototype, "offsetHeight").get
+  );
+} catch (e) {} //anonyco
 
 //Hooks used for animation states on GuestLanding
-
 export default function GuestLanding(props) {
   const [iconPlayState, setIconPlayState] = useState("paused");
   const [landingPlayState, setLandingPlayState] = useState({
@@ -33,75 +43,34 @@ export default function GuestLanding(props) {
   });
 
   //Hooks used for timer states used in useInterval
-  const [delay, setDelay] = useState(1000);
+  const [delay, setDelay] = useState(500);
+  const [delay2, setDelay2] = useState(null);
   const [count, setCount] = useState(0);
+  const [count2, setCount2] = useState(0);
   //Hook used to set View for loading page based on needed view
   const [view, setView] = useState("landing");
+  const [view2, setView2] = useState("");
 
-  // buildArrays = (e) => {
+  const enterCard = document.querySelector("#cardEnter");
+  const exitCard = document.querySelector("#cardExit");
+  const enterLogo = document.querySelector("#logoEnter");
+  const exitLogo = document.querySelector("#logoExit");
 
-  const idsList = document.querySelectorAll(
-    "#iconHolder, #iconWiggle, #logoEnter, #logoExit, #cardEnter, #cardExit"
-  );
-
-  const cardEnterList = document.querySelectorAll("#cardEnter");
-  const cardExitList = document.querySelectorAll("#cardExit");
-  const logoEnterList = document.querySelectorAll("#logoEnter");
-  const logoExitList = document.querySelectorAll("#logoExit");
-  const idsArray = [...idsList];
-  const cardEnterArray = [...cardEnterList];
-  const cardExitArray = [...cardExitList];
-  const logoEnterArray = [...logoEnterList];
-  const logoExitArray = [...logoExitList];
-
-  function cardEnterReset(e) {
-    e.classList.remove("ld", "spring-ttb-in", "paused");
-    void e.offsetHeight;
-    e.classList.add("ld", "spring-ttb-in", "paused");
-  }
-  function logoEnterReset(e) {
-    e.classList.remove("ld", "ld-float-btt-in", "paused");
-    void e.offsetWidth;
-    e.classList.add("ld", "ld-float-btt-in", "paused");
-  }
-  function cardExitReset(e) {
-    e.classList.remove("ld", "power-off", "paused");
-    void e.offsetHeight;
-    e.classList.add("ld", "power-off", "paused");
-  }
-  function logoExitReset(e) {
-    e.classList.remove("ld", "power-off", "paused");
-    void e.offsetWidth;
-    e.classList.add("ld", "power-off", "paused");
+  function reflowOne(cl) {
+    cl.classList.remove("ld");
+    forceReflowJS(cl);
+    cl.classList.add("ld");
+    console.log(count, count2, "reflowONEfinished", cl);
   }
 
-  function animReset() {
-    cardEnterArray.forEach(e => {
-      cardEnterReset(e);
-    });
-    cardExitArray.forEach(e => {
-      cardExitReset(e);
-    });
-    logoEnterArray.forEach(e => {
-      logoEnterReset(e);
-    });
-    logoExitArray.forEach(e => {
-      logoExitReset(e);
-    });
-    console.log(
-      "anime reset fired",
-      cardEnterArray,
-      cardExitArray,
-      logoEnterArray,
-      logoExitArray
-    );
-  }
+  function AnimReset(e) {
 
-  function changeView(view) {
-    animReset();
-    setCount(0);
-    setDelay(1000);
-    setView(view);
+    setLandingPlayState({ exit: "running" });
+    setProfilePlayState({ exit: "running" });
+    setCount2(0);
+    setDelay2(500);
+    setView2(e);
+   
   }
 
   //useInterval hook sets an interval delay that is used to pause
@@ -109,7 +78,7 @@ export default function GuestLanding(props) {
   useInterval(
     () => {
       if (count <= 10) {
-        setCount(count + 1);
+        setCount(count + 0.5);
       }
       if (count <= 1) {
         setIconPlayState("running");
@@ -119,10 +88,14 @@ export default function GuestLanding(props) {
         setProfilePlayState({ logo: "running" });
       }
       if (count === 2) {
+        setLandingPlayState({ exit: "paused" });
+        setProfilePlayState({ exit: "paused" });
+      }
+      if (count <= 2) {
         setLandingPlayState({ card: "running" });
         setProfilePlayState({ card: "running" });
       }
-      if (count >= 6) {
+      if (count >= 3) {
         setLandingPlayState({
           card: "paused",
           exit: "paused",
@@ -133,6 +106,7 @@ export default function GuestLanding(props) {
           exit: "paused",
           logo: "paused"
         });
+    
         setCount(0);
         setDelay(null);
         return;
@@ -141,13 +115,48 @@ export default function GuestLanding(props) {
     delay,
     count
   );
+  useInterval2(
+    () => {
+      if (count2 <= 10) {
+        setCount2(count2 + 0.5);
+      }
+      if (count2 <= 1) {
+        reflowOne(enterCard);
+        reflowOne(enterLogo);
+      }
+      if (count2 === 1.5) {
+        setLandingPlayState({ exit: "paused" });
+        setProfilePlayState({ exit: "paused" });
+        reflowOne(exitCard);
+        reflowOne(exitLogo);
+     
+      }
+      if (count2 === 2 ){
+        setLandingPlayState({ logo: "running", card: "running" });
+        setProfilePlayState({ logo: "running", card: "running"  });
+      }
+      if (count2 === 3.0) {
+        setLandingPlayState({
+          card: "paused",
+          exit: "paused",
+          logo: "paused"
+        });
+        setProfilePlayState({
+          card: "paused",
+          exit: "paused",
+          logo: "paused"
+        })}
+        if(count2 === 3.5 ){
+        setCount2(0);
+        setDelay2(null);
+        return;
+      }}
+    ,
+    delay2,
+    count2
+  );
 
-  function StateReset(view) {
-    setCount(0);
-    setDelay(1000);
-    setView(view);
-  }
-
+  
   //Determines view to load for user based on view variable defined above
   //function called in GuestLanding return
   function GetView(view) {
@@ -159,6 +168,7 @@ export default function GuestLanding(props) {
       return ViewLanding();
     }
   }
+
   //Default Return Value augmented by ReturnView function to display page
   return (
     <span id="svgbkg">
@@ -190,11 +200,10 @@ export default function GuestLanding(props) {
         {GetView(view)}
       </div>
       {count}
+      {count2}
       <button onClick={() => setLandingPlayState({ exit: "running" })}>
         Exit stage Right
       </button>
- 
- 
     </span>
   );
 
@@ -206,70 +215,66 @@ export default function GuestLanding(props) {
     return (
       <main>
         <div className="WelcomeSVGHolders">
-          <h1
-            id="logoEnter"
-            className="welcomeLogoHolders"
-            class="ld ld-float-btt-in paused"
+          <div
+            id="logoExit"
+            className="welcomeLogoExit"
+            class="ld ld-power-off paused"
             style={{
-              animationPlayState: `${profilePlayState.logo}`,
-              animationDuration: `2s`
+              animationPlayState: `${profilePlayState.exit}`,
+              animationDuration: `0.7s`
             }}
           >
-            <div
-              id="logoExit"
-              className="welcomeLogoExit"
-              class="ld ld-power-off paused"
+            <h1
+              id="logoEnter"
+              className="welcomeLogoHolders"
+              class="ld ld-float-btt-in paused"
               style={{
-                animationPlayState: `${profilePlayState.exit}`,
-                animationDuration: `2s`
+                animationPlayState: `${profilePlayState.logo}`,
+                animationDuration: `1.5s`
               }}
             >
               <div className="welcomeBackLargeHolder">
                 <LogoWelcomeBackLarge className="welcomeBackLarge" />
               </div>
-
-              {/* <div className="mediumLogoHolder">
-          <LogoFloatMed className="logoFloatMed" />
-        </div>
-
-        <div className="smallLogoHolder">
-          <LogoFloatSmall className="logoFloatSmall" />
-        </div>
-
-        <div className="tinyLogoHolder">
-          <LogoFloatTiny className="logoFloatTiny" />
-        </div> */}
-            </div>
-          </h1>
+            </h1>
+          </div>
         </div>
         <div className="column">
           <div className="container">
             <div className="row">
               <div
-                id="cardEnter"
-                className="welcomeCardEnter"
-                class="ld ld-spring-ttb-in paused"
+                id="cardExit"
+                className="welcomeCardExit"
+                class="ld ld-power-off paused"
                 style={{
-                  animationPlayState: `${profilePlayState.card}`,
-                  animationDuration: `3s`
+                  animationPlayState: `${profilePlayState.exit}`,
+                  animationDuration: `0.5s`
                 }}
               >
                 <div
-                  id="cardExit"
-                  className="welcomeCardExit"
-                  class="ld ld-power-off paused"
+                  id="cardEnter"
+                  className="welcomeCardEnter"
+                  class="ld ld-spring-ttb-in paused"
                   style={{
-                    animationPlayState: `${profilePlayState.exit}`,
-                    animationDuration: `2s`
+                    animationPlayState: `${profilePlayState.card}`,
+                    animationDuration: `1s`
                   }}
                 >
-                  <Card></Card>
+                  <Card2>
+                    <Login />
+                  </Card2>
                   <br />
                   <br />
-                  <Card></Card>
-                  <button onClick={() => {changeView("landing")}}>
-                View to Landing
-      </button>
+                  <Card2>
+                    <Register />
+                  </Card2>
+                  <button
+                    onClick={() => {
+                      AnimReset("landing");
+                    }}
+                  >
+                    reset ALL ANIM
+                  </button>
                 </div>
               </div>
             </div>
@@ -283,22 +288,22 @@ export default function GuestLanding(props) {
     return (
       <main>
         <div className="SVGHolders">
-          <div
-            id="logoEnter"
-            className="landingLogoEnter"
-            class="ld ld-float-btt-in paused"
+          <h1
+            id="logoExit"
+            className="landingLogoExit"
+            class="ld ld-power-off paused"
             style={{
-              animationPlayState: `${landingPlayState.logo}`,
-              animationDuration: `2s`
+              animationPlayState: `${landingPlayState.exit}`,
+              animationDuration: `0.8s`
             }}
           >
-            <h1
-              id="logoExit"
-              className="landingLogoExit"
-              class="ld ld-power-off paused"
+            <div
+              id="logoEnter"
+              className="landingLogoEnter"
+              class="ld ld-float-btt-in paused"
               style={{
-                animationPlayState: `${landingPlayState.exit}`,
-                animationDuration: `2s`
+                animationPlayState: `${landingPlayState.logo}`,
+                animationDuration: `1.5s`
               }}
             >
               <div className="largeLogoHolder">
@@ -316,28 +321,28 @@ export default function GuestLanding(props) {
               <div className="tinyLogoHolder">
                 <LogoFloatTiny className="logoFloatTiny" />
               </div>
-            </h1>
-          </div>
+            </div>
+          </h1>
         </div>
         <div className="column">
           <div className="container">
             <div className="row">
               <div
-                id="cardEnter"
-                className="landingCardEnter"
-                class="ld ld-spring-ttb-in paused"
+                id="cardExit"
+                className="landingCardExit"
+                class="ld ld-power-off paused"
                 style={{
-                  animationPlayState: `${landingPlayState.card}`,
-                  animationDuration: `3s`
+                  animationPlayState: `${landingPlayState.exit}`,
+                  animationDuration: `0.5s`
                 }}
               >
                 <div
-                  id="cardExit"
-                  className="landingCardExit"
-                  class="ld ld-power-off paused"
+                  id="cardEnter"
+                  className="landingCardEnter"
+                  class="ld ld-power-on paused"
                   style={{
-                    animationPlayState: `${landingPlayState.exit}`,
-                    animationDuration: `3.5s`
+                    animationPlayState: `${landingPlayState.card}`,
+                    animationDuration: `1s`
                   }}
                 >
                   <Card>
@@ -349,10 +354,12 @@ export default function GuestLanding(props) {
                     <Register />
                   </Card>
                   <button
-        onClick={() => {changeView("profile")}}
-      >
-        View to Profile
-      </button>
+                    onClick={() => {
+                      AnimReset("profile");
+                    }}
+                  >
+                    reset ALL ANIM
+                  </button>
                 </div>
               </div>
             </div>
@@ -362,6 +369,21 @@ export default function GuestLanding(props) {
     );
   }
 }
+
+
+
+       {/* <div className="mediumLogoHolder">
+          <LogoFloatMed className="logoFloatMed" />
+        </div>
+
+        <div className="smallLogoHolder">
+          <LogoFloatSmall className="logoFloatSmall" />
+        </div>
+
+        <div className="tinyLogoHolder">
+          <LogoFloatTiny className="logoFloatTiny" />
+        </div> */}
+
 
 // return (
 //   <span id="svgbkg">
@@ -438,3 +460,14 @@ export default function GuestLanding(props) {
 //     </div>
 //   </span>
 // );
+
+// function reflowArray(els){
+//   var i;
+//   for( i= 0; i< els.length-1; i++){
+//   els[i].classList.remove('.ld')
+//   forceReflowJS(els[i])
+//   // void els[i].document.offsetHeight
+//   els[i].classList.add('.ld')
+//  }
+// console.log("reflow loop finished", els, els.length)
+// }

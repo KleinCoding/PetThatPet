@@ -81,3 +81,22 @@ export const useDelayNextChildren = (children, delay) => {
       }
     }, [delay]);
   }
+
+  export function useInterval2(callback, delay2) {
+    const savedCallback = useRef();
+  
+    useEffect(() => {
+      savedCallback.current = callback;
+    });
+  
+    useEffect(() => {
+      function tick() {
+        savedCallback.current();
+      }
+  
+      if (delay2 !== null) {
+        let id = setInterval(tick, delay2);
+        return () => clearInterval(id);
+      }
+    }, [delay2]);
+  }

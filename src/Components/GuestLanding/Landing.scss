@@ -30,24 +30,22 @@
     @media screen and (max-width: 600px){
         justify-content: center;
 }
+
 }
 .landingIconHolder{
     width: 50vw;
     @media screen and (max-width: 600px){
-        height: 6em;
+        height: 50%;
         width: auto;
        justify-self: center;
     }
 }
-
-
 .largeLogoHolder{
     display: inline;
     @media screen and (max-width: 800px){
        display: none
     }
 }
-
 .mediumLogoHolder{
     display: none;
     @media only screen and (min-width: 551px) and (max-width:799px){
@@ -60,13 +58,15 @@
         display: block;
     }
 }
-
 .tinyLogoHolder{
     display: none;
     @media only screen and (min-width: 100px) and (max-width:374px){
         display: block;
     }
 }
+
+
+
 
 
 .spacer1{

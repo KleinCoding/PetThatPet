@@ -64,12 +64,15 @@ async function loginUser(req, res) {
   // If the user is not found, then send a msg back stating incorrect username/password
   if (!foundUser[0]) {
     res.status(400).json("Username or Password is Incorrect.")
+    
+   
     // Otherwise, authenticate the hashed pw first, and then login the user
   } else {
     const isAuthenticated = bcrypt.compareSync(password, foundUser[0].hash)
     // If the password does not match, send a msg stating so
     if (!isAuthenticated) {
       res.status(403).json("Password is incorrect.")
+       
       // Otherwise, store the found user on session
     } else {
       req.session.user = {
@@ -80,7 +83,9 @@ async function loginUser(req, res) {
     console.log("Logged in", req.session.user);
     // Send back an ok with the user on session
     res.status(200).json(req.session.user)
+    
   }
+
 }
 
 async function logoutUser(req, res) {

@@ -1,5 +1,4 @@
-/* eslint-disable max-len,no-script-url,jsx-a11y/anchor-is-valid,react/no-unescaped-entities */
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Color from "color";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -10,72 +9,102 @@ import Link from "@material-ui/core/Link";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Hidden from "@material-ui/core/Hidden";
+import { loginUser } from "../../../reducks/reducers/authReducer";
+import { useDispatch } from "react-redux";
 
-// DL01 = DashboardLogin01
-// I think we don't have to use the full name, it's redundant.
-const DashboardLogin = () => (
-  <Grid className={"DL01-root"} container>
-    <Hidden smUp>
-      <div className={"DL01-mobileCover"}>
-        <div className={"DL01-cover"} />
-      </div>
-    </Hidden>
+function DashboardLogin(props) {
+  const dispatch = useDispatch();
+  const [loginState, setLoginState] = useState({
+    username: "",
+    password: ""
+  });
+  const [attemptLogin, setAttemptLogin] = useState(null);
+
+  function attemptToLogin() {
+    setAttemptLogin(loginState);
+  }
+
+  useEffect(() => {
+    dispatch(loginUser(attemptLogin));
+  }, [attemptLogin]);
+
+  return (
     <Grid
+      className={"DL01-root"}
       container
       justify={"center"}
       alignItems={"center"}
-      direction={"column"}
-      item
-      xs={12}
-      sm={6}
-      md={5}
-      className={"DL01-GridItem -form"}>
-
-      <form className={"DL01-form"}
-       style = {{placeContent: "center"}}>
-        {/* <img
+    >
+      <Hidden smUp>
+        <div className={"DL01-mobileCover"}>
+          <div className={"DL01-cover"} />
+        </div>
+      </Hidden>
+      <Grid
+        container
+        justify={"center"}
+        alignItems={"center"}
+        direction={"column"}
+        item
+        xs={12}
+        sm={6}
+        md={5}
+        className={"DL01-GridItem -form"}
+      >
+        <form className={"DL01-form"} style={{ placeContent: "center" }}>
+          {/* <img
           alt={"logo"}
           className={"DL01-logo"}
           src={
             "https://images.vexels.com/media/users/3/144356/isolated/preview/52fb168f1bd3abf7e97a8e9bfdac331d-speed-car-logo-by-vexels.png"
           }
         /> */}
-        <Typography color={"textSecondary"}>
-          Lets pet some pets!
-        </Typography>
-        <TextField
-          fullWidth
-          label={"Username"}
-          margin={"normal"}
-          variant="filled"
-        />
-        <TextField
-          fullWidth
-          label={"Password"}
-          margin={"normal"}
-          variant="filled"
-        />
-        <FormControl fullWidth>
-          <FormControlLabel
-            control={<Checkbox value="checkedC" />}
-            label="Remember Me"
+          <Typography color={"textSecondary"}>
+            Lets pet some pets y'all!
+          </Typography>
+          <TextField
+            fullWidth
+            label={"Username"}
+            margin={"normal"}
+            variant="filled"
+            onChange={e =>
+              setLoginState({ ...loginState, username: e.currentTarget.value })
+            }
           />
-        </FormControl>
-        <FormControl margin={"normal"} fullWidth>
-          <Button fullWidth variant={"contained"} color={"primary"}>
-            Log in
-          </Button>
-        </FormControl>
-        <Typography className={"DL01-signUp"}>
-          Don't have an account ? <Link>Sign Up Now</Link>
-        </Typography>
-      </form>
+          <TextField
+            fullWidth
+            label={"Password"}
+            margin={"normal"}
+            variant="filled"
+            onChange={e =>
+              setLoginState({ ...loginState, password: e.currentTarget.value })
+            }
+          />
+          <FormControl fullWidth>
+            <FormControlLabel
+              control={<Checkbox value="checkedC" />}
+              label="Remember Me"
+            />
+          </FormControl>
+          <FormControl margin={"normal"} fullWidth>
+            <Button
+              fullWidth
+              variant={"contained"}
+              color={"primary"}
+              onClick={attemptToLogin}
+            >
+              Log in
+            </Button>
+            {/* <button onClick = {() => console.log("result", result)}>log result</button> */}
+          </FormControl>
+          <Typography className={"DL01-signUp"}>
+            Don't have an account ? <Link>Sign Up Now</Link>
+          </Typography>
+        </form>
+      </Grid>
     </Grid>
-  </Grid>
-);
-
-
-
+  );
+}
 
 DashboardLogin.getTheme = ({ palette, breakpoints }) => {
   const gradient = `linear-gradient(49deg, ${Color(palette.primary.main)
@@ -103,8 +132,7 @@ DashboardLogin.getTheme = ({ palette, breakpoints }) => {
           justifyContent: "center",
           [breakpoints.only("xs")]: {
             position: "relative",
-            minHeight: 566,
-            
+            minHeight: 566
           },
           "& .DL01-mobileCover": {
             position: "absolute",
@@ -218,6 +246,5 @@ DashboardLogin.getTheme = ({ palette, breakpoints }) => {
     }
   };
 };
-
 
 export default DashboardLogin;

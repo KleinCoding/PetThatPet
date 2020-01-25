@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Landing.scss";
-import CatPaw3 from "../../Styles/SVG/Icons/catpaw3";
-import {
-  LogoFloatLarge,
-  LogoFloatMed,
-  LogoFloatSmall,
-  LogoFloatTiny,
-  LogoWelcomeBackLarge
-} from "../../Styles/SVG/Logos/Logos";
+import {LandingLogo, WelcomeLogo, CatPaw3} from '../../Styles/SVG/Index'
 import { Card } from "../Particles/Particles";
 import { Card2 } from "../Particles/ParticlesEMPTY";
 import Login from "../Login/Login";
@@ -15,11 +8,12 @@ import Register from "../Register/Register";
 import "../../Styles/transition.css";
 import "../../Styles/loading.css";
 import { useInterval, useInterval2 } from "../../Hooks/Hooks";
-
+// Material UI Tests
 import DashboardLogin from "../Material/Login/Login"
 import DashboardLogin2 from "../Material/Login/Login2"
 import PostCard from "../Material/Card/Card"
-//Force Reflow
+
+//Force Reflow function
 try {
   var forceReflowJS = (forceReflowJS = function(a) {
     "use strict";
@@ -27,7 +21,7 @@ try {
   }).call.bind(
     Object.getOwnPropertyDescriptor(HTMLElement.prototype, "offsetHeight").get
   );
-} catch (e) {} //anonyco
+} catch (e) {} 
 
 //Hooks used for animation states on GuestLanding
 export default function GuestLanding(props) {
@@ -53,11 +47,22 @@ export default function GuestLanding(props) {
   //Hook used to set View for loading page based on needed view
   const [view, setView] = useState("landing");
   const [view2, setView2] = useState("");
-
+  //Hooks for calling classes for animation reflow functions
   const enterCard = document.querySelector("#cardEnter");
   const exitCard = document.querySelector("#cardExit");
   const enterLogo = document.querySelector("#logoEnter");
   const exitLogo = document.querySelector("#logoExit");
+
+  
+  //Sets exit animations to run,
+  //activates interval2 (forces animation reflows and view change on a timer) 
+  function AnimReset(e) {
+    setLandingPlayState({ exit: "running" });
+    setProfilePlayState({ exit: "running" });
+    setCount2(0);
+    setDelay2(500);
+    setView2(e);
+  }
 
   function reflowOne(cl) {
     cl.classList.remove("ld");
@@ -66,18 +71,9 @@ export default function GuestLanding(props) {
     console.log(count, count2, "reflowONEfinished", cl);
   }
 
-  function AnimReset(e) {
-
-    setLandingPlayState({ exit: "running" });
-    setProfilePlayState({ exit: "running" });
-    setCount2(0);
-    setDelay2(500);
-    setView2(e);
-   
-  }
-
-  //useInterval hook sets an interval delay that is used to pause
-  //loading/transition animations on page load
+  //useInterval hook sets an interval delay timer
+  //useInterval1 sets starting values + engages animations on load
+  //useInterval2 will be called on necessary view changes to reflow css animations
   useInterval(
     () => {
       if (count <= 10) {
@@ -160,17 +156,6 @@ export default function GuestLanding(props) {
   );
 
   
-  //Determines view to load for user based on view variable defined above
-  //function called in GuestLanding return
-  function GetView(view) {
-    if (view === "landing") {
-      return ViewLanding();
-    } else if (view === "profile") {
-      return ViewProfile();
-    } else {
-      return ViewLanding();
-    }
-  }
 
   //Default Return Value augmented by ReturnView function to display page
   return (
@@ -197,23 +182,35 @@ export default function GuestLanding(props) {
             }}
           >
             <br />
-            <CatPaw3 height="10em" width="10em" />
+            <CatPaw3 />
           </div>
         </div>
         {GetView(view)}
       </div>
-      {count}
-      {count2}
-      <button onClick={() => setLandingPlayState({ exit: "running" })}>
-        Exit stage Right
-      </button>
     </span>
   );
 
-  function ViewPost() {
-    return <div>PostsHere</div>;
+  //Determines view to load for user based on view variable defined above
+  //function called in GuestLanding return
+  //call animReset() and send the desired view in via a string EX: "landing"
+  function GetView(view) {
+    if (view === "landing") {
+      return ViewLanding();
+    } else if (view === "profile") {
+      return ViewProfile();
+    // } else if (view === "register") {
+    //   return ViewRegister();
+    // } else if (view === "newUser") {
+    //   return ViewNewUser();
+    // } else if (view === "posts") {
+    //   return Viewposts();
+    } else {
+      return ViewLanding();
+    }
   }
 
+  //Each viewFunction() populates the default return with the necessary
+  //elements to create the desired simulated "page"
   function ViewProfile() {
     return (
       <main>
@@ -236,8 +233,8 @@ export default function GuestLanding(props) {
                 animationDuration: `1.5s`
               }}
             >
-              <div className="welcomeBackLargeHolder">
-                <LogoWelcomeBackLarge className="welcomeBackLarge" />
+              <div className="welcomeBackHolder">
+                <WelcomeLogo  />
               </div>
             </h1>
           </div>
@@ -276,7 +273,7 @@ export default function GuestLanding(props) {
                       AnimReset("landing");
                     }}
                   >
-                    reset ALL ANIM
+                    reset ALL ANIM to LANDING
                   </button>
                 </div>
               </div>
@@ -286,7 +283,6 @@ export default function GuestLanding(props) {
       </main>
     );
   }
-
   function ViewLanding() {
     return (
       <main>
@@ -307,23 +303,8 @@ export default function GuestLanding(props) {
               style={{
                 animationPlayState: `${landingPlayState.logo}`,
                 animationDuration: `1.5s`
-              }}
-            >
-              <div className="largeLogoHolder">
-                <LogoFloatLarge className="logoFloatLarge" />
-              </div>
-
-              <div className="mediumLogoHolder">
-                <LogoFloatMed className="logoFloatMed" />
-              </div>
-
-              <div className="smallLogoHolder">
-                <LogoFloatSmall className="logoFloatSmall" />
-              </div>
-
-              <div className="tinyLogoHolder">
-                <LogoFloatTiny className="logoFloatTiny" />
-              </div>
+              }}>
+              <LandingLogo />
             </div>
           </h1>
         </div>
@@ -348,20 +329,20 @@ export default function GuestLanding(props) {
                     animationDuration: `1s`
                   }}
                 >
-                  <Card>
-                    <DashboardLogin />
-                  </Card>
+                  <Card2>
+                    <DashboardLogin AnimReset={AnimReset}/>
+                  </Card2>
                   <br />
                   <br />
-                  <Card>
+                  <Card2>
                     <Register />
-                  </Card>
+                  </Card2>
                   <button
                     onClick={() => {
                       AnimReset("profile");
                     }}
                   >
-                    reset ALL ANIM
+                    reset ALL ANIM to PROFILE
                   </button>
                 </div>
               </div>
@@ -371,106 +352,14 @@ export default function GuestLanding(props) {
       </main>
     );
   }
+  function ViewRegister(){
+  }
+  function ViewNewUser(){
+  }
+  function ViewPosts(){
+  }
 }
 
 
 
-       {/* <div className="mediumLogoHolder">
-          <LogoFloatMed className="logoFloatMed" />
-        </div>
-
-        <div className="smallLogoHolder">
-          <LogoFloatSmall className="logoFloatSmall" />
-        </div>
-
-        <div className="tinyLogoHolder">
-          <LogoFloatTiny className="logoFloatTiny" />
-        </div> */}
-
-
-// return (
-//   <span id="svgbkg">
-//     <div style={{ width: "100vw" }}>
-//       <br />
-//       <br />
-//       <div className="SVGHolders">
-//         <div
-//           className="catPawHolder"
-//           class="ld ld-power-on paused"
-//           style={{
-//             animationPlayState: `${iconPlayState}`,
-//             animationDuration: `1.5s`
-//           }}
-//         >
-//           <CatPaw3 height="10em" width="auto" />
-//         </div>
-
-//         <div
-//           className="landingLogoHolders"
-//           class="ld ld-float-btt-in paused"
-//           style={{
-//             animationPlayState: `${logoPlayState}`,
-//             animationDuration: `2s`
-//           }}
-//         >
-//           <div className="largeLogoHolder">
-//             <LogoFloatLarge className="logoFloatLarge" />
-//           </div>
-
-//           <div className="mediumLogoHolder">
-//             <LogoFloatMed className="logoFloatMed" />
-//           </div>
-
-//           <div className="smallLogoHolder">
-//             <LogoFloatSmall className="logoFloatSmall" />
-//           </div>
-
-//           <div className="tinyLogoHolder">
-//             <LogoFloatTiny className="logoFloatTiny" />
-//           </div>
-//         </div>
-//       </div>
-//       <div className="column">
-//         <div className="container">
-//           <div
-//             className="row"
-//             class="ld ld-spring-ttb-in paused"
-//             style={{
-//               animationPlayState: `${cardPlayState}`,
-//               animationDuration: `3s`
-//             }}
-//           >
-//             <div
-//               className="cardExit"
-//               class="ld ld-power-off paused"
-//               style={{
-//                 animationPlayState: `${cardExitState}`,
-//                 animationDuration: `2s`
-//               }}
-//             >
-//               <Card>
-//                 <Login setCardExitState={setCardExitState()} />
-//               </Card>
-//               <br />
-//               <br />
-//               <Card>
-//                 <Register setCardExitState={setCardExitState()} />
-//               </Card>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   </span>
-// );
-
-// function reflowArray(els){
-//   var i;
-//   for( i= 0; i< els.length-1; i++){
-//   els[i].classList.remove('.ld')
-//   forceReflowJS(els[i])
-//   // void els[i].document.offsetHeight
-//   els[i].classList.add('.ld')
-//  }
-// console.log("reflow loop finished", els, els.length)
-// }
+ 

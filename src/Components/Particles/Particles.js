@@ -1,15 +1,9 @@
-import React, { useState, useRef, Fragment, useEffect } from "react";
+import React, { useState, useRef, Fragment} from "react";
 import { useSpring, animated } from "react-spring";
 import ReactParticles from "react-particles-js";
-import particlesConfig from "./particles-config.js";
 import "./stylesDisplay.scss";
-import { useSelector, useDispatch } from "react-redux";
-import { getAllRatingsByUserId } from "../../reducks/reducers/ratingsReducer";
 import Ellipsis from "../Loading/Loading";
 import { ReactQueryConfigProvider } from "react-query";
-import Login from "../Login/Login";
-import Register from "../Register/Register";
-import GuestLanding from "../GuestLanding/GuestLanding";
 import {useDelayNextChildren} from "../../Hooks/Hooks"
 
 

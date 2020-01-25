@@ -26,6 +26,7 @@ const { SERVER_PORT, SESSION_SECRET, CONNECTION_STRING } = process.env;
 
 // Middleware
 const auth = require('./middleware/authMiddleware');
+
 app.use(express.json());
 
 

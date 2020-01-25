@@ -16,6 +16,9 @@ import "../../Styles/transition.css";
 import "../../Styles/loading.css";
 import { useInterval, useInterval2 } from "../../Hooks/Hooks";
 
+import DashboardLogin from "../Material/Login/Login"
+import DashboardLogin2 from "../Material/Login/Login2"
+import PostCard from "../Material/Card/Card"
 //Force Reflow
 try {
   var forceReflowJS = (forceReflowJS = function(a) {
@@ -346,7 +349,7 @@ export default function GuestLanding(props) {
                   }}
                 >
                   <Card>
-                    <Login />
+                    <DashboardLogin />
                   </Card>
                   <br />
                   <br />

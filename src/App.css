@@ -61,3 +61,20 @@ li {
   grid-area: 1 / 2 / 2 / 5;
 }
 
+.carousel {
+  display: flex;
+  padding: 10px 10px 0;
+  border-radius: 4px;
+  height: 300px;
+  width: 375px;
+  margin: auto;
+}
+.carousel__main {
+  border-radius: 4px;
+  height: 110px;
+}
+
+.demo-item {
+  height: 110px;
+}
+

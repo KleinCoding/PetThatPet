@@ -23,6 +23,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "file-type": "^13.1.1",
+    "flat-carousel": "0.0.1",
     "fs": "0.0.1-security",
     "massive": "^6.1.4",
     "mdbreact": "^4.25.0",

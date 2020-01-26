@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Landing.scss";
 import {LandingLogo, WelcomeLogo, CatPaw3} from '../../Styles/SVG/Index'
-import { Card } from "../Particles/Particles";
 import { Card2 } from "../Particles/ParticlesEMPTY";
 import Login from "../Login/Login";
 import Register from "../Register/Register";
@@ -10,8 +9,9 @@ import "../../Styles/loading.css";
 import { useInterval, useInterval2 } from "../../Hooks/Hooks";
 // Material UI Tests
 import DashboardLogin from "../Material/Login/Login"
-import DashboardLogin2 from "../Material/Login/Login2"
 import PostCard from "../Material/Card/Card"
+import CarouselDisplay from "../Material/Carousel/Carousel"
+
 
 //Force Reflow function
 try {
@@ -57,8 +57,8 @@ export default function GuestLanding(props) {
   //Sets exit animations to run,
   //activates interval2 (forces animation reflows and view change on a timer) 
   function AnimReset(e) {
-    setLandingPlayState({ exit: "running" });
-    setProfilePlayState({ exit: "running" });
+    setLandingPlayState({ ...landingPlayState, exit: "running" });
+    setProfilePlayState({ ...profilePlayState, exit: "running" });
     setCount2(0);
     setDelay2(500);
     setView2(e);
@@ -86,15 +86,15 @@ export default function GuestLanding(props) {
         setLandingPlayState({ logo: "running" });
         setProfilePlayState({ logo: "running" });
       }
-      if (count === 2) {
+      if (count === 2.5) {
         setLandingPlayState({ exit: "paused" });
         setProfilePlayState({ exit: "paused" });
       }
-      if (count <= 2) {
+      if (count <= 2.5) {
         setLandingPlayState({ card: "running" });
         setProfilePlayState({ card: "running" });
       }
-      if (count >= 3) {
+      if (count >= 3.5) {
         setLandingPlayState({
           card: "paused",
           exit: "paused",
@@ -105,11 +105,11 @@ export default function GuestLanding(props) {
           exit: "paused",
           logo: "paused"
         });
-    
+        if (count >= 4) {
         setCount(0);
         setDelay(null);
         return;
-      }
+      }}
     },
     delay,
     count
@@ -119,22 +119,26 @@ export default function GuestLanding(props) {
       if (count2 <= 10) {
         setCount2(count2 + 0.5);
       }
-      if (count2 <= 1) {
+      if (count2 === 1) {
         reflowOne(enterCard);
         reflowOne(enterLogo);
       }
       if (count2 === 1.5) {
-        setLandingPlayState({ exit: "paused" });
-        setProfilePlayState({ exit: "paused" });
-        reflowOne(exitCard);
-        reflowOne(exitLogo);
-     
+        setLandingPlayState({ ...landingPlayState, exit: "paused" });
+        setProfilePlayState({ ...profilePlayState, exit: "paused" });
       }
       if (count2 === 2 ){
-        setLandingPlayState({ logo: "running", card: "running" });
-        setProfilePlayState({ logo: "running", card: "running"  });
+        
+        setView(view2)
+
       }
-      if (count2 === 3.0) {
+      if (count2 === 2.5) {
+       
+        setLandingPlayState({...landingPlayState, logo: "running", card: "running" });
+        setProfilePlayState({...profilePlayState, logo: "running", card: "running"  });
+      }
+      if (count2 === 3.5) {
+       
         setLandingPlayState({
           card: "paused",
           exit: "paused",
@@ -145,7 +149,9 @@ export default function GuestLanding(props) {
           exit: "paused",
           logo: "paused"
         })}
-        if(count2 === 3.5 ){
+        if(count2 === 4 ){
+            reflowOne(exitLogo)
+        reflowOne(exitCard)
         setCount2(0);
         setDelay2(null);
         return;
@@ -242,15 +248,6 @@ export default function GuestLanding(props) {
         <div className="column">
           <div className="container">
             <div className="row">
-              <div
-                id="cardExit"
-                className="welcomeCardExit"
-                class="ld ld-power-off paused"
-                style={{
-                  animationPlayState: `${profilePlayState.exit}`,
-                  animationDuration: `0.5s`
-                }}
-              >
                 <div
                   id="cardEnter"
                   className="welcomeCardEnter"
@@ -259,7 +256,16 @@ export default function GuestLanding(props) {
                     animationPlayState: `${profilePlayState.card}`,
                     animationDuration: `1s`
                   }}
-                >
+                > 
+                <div
+                id="cardExit"
+                className="welcomeCardExit"
+                class="ld ld-power-off paused"
+                style={{
+                  animationPlayState: `${profilePlayState.exit}`,
+                  animationDuration: `0.5s`
+                }}
+              >
                   <Card2>
                     <Login />
                   </Card2>
@@ -332,18 +338,15 @@ export default function GuestLanding(props) {
                   <Card2>
                     <DashboardLogin AnimReset={AnimReset}/>
                   </Card2>
-                  <br />
-                  <br />
-                  <Card2>
-                    <Register />
-                  </Card2>
                   <button
                     onClick={() => {
                       AnimReset("profile");
                     }}
                   >
-                    reset ALL ANIM to PROFILE
+                    reset ALL ANIM to LANDING
                   </button>
+                  <br />
+                  <br />
                 </div>
               </div>
             </div>

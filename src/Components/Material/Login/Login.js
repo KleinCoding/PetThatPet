@@ -22,6 +22,7 @@ function DashboardLogin(props) {
 
   function attemptToLogin() {
     setAttemptLogin(loginState);
+    props.AnimReset("profile")
   }
 
   useEffect(() => {

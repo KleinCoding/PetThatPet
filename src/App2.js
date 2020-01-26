@@ -3,37 +3,54 @@ import "./reset.css";
 import "./App.css";
 import GuestLanding from "./Components/GuestLanding/GuestLanding";
 import { Hero } from "./Components/Particles/Particles";
-
-import { useSelector, useDispatch } from "react-redux";
-import { getAllRatings } from "./reducks/reducers/ratingsReducer";
+import { useSelector, useDispatch, shallowEqual } from "react-redux";
+import {
+  getAllRatings,
+  getAllRatingsByUserId
+} from "./reducks/reducers/ratingsReducer";
 import { getAllPosts } from "./reducks/reducers/postsReducer";
-import { useAsyncLoad}  from "./Hooks/Hooks"
+import { useAsyncLoad } from "./Hooks/Hooks";
 import Axios from "axios";
+
 // import { getCurrentUser } from "./reducks/reducers/authReducer";
 
-function App2() { 
-  const dispatch= useDispatch();
+function App2() {
+  const dispatch = useDispatch();
+  const [data, setData] = useState({});
+  const [url, setUrl] = useState("/api/posts");
+  const [isLoading, setIsLoading] = useState(true);
+  const {loggedIn} = useSelector(state => ({loggedIn: state.authReducer.loggedIn}))
 
   useEffect(() => {
-   dispatch(getAllRatings());
-   dispatch(getAllPosts());
-    console.log("App2 useEffect Dispatches");
-  }, {} );
+    const fetchData = async () => {
+      setIsLoading( true );
+      const res = await Axios(url);
+      setData(res.data);
+      console.log(res.data);
+      setIsLoading(false);
+    };
+    dispatch(getAllPosts());
+    dispatch(getAllRatings());
+    if (loggedIn === true) {
+      console.log("getting ratins now that youre logged in!")
+      dispatch(getAllRatingsByUserId());
+    }
+    fetchData();
+  }, [url]);
+
   
-  const [reducerState, setReducerState] = useState({
-    auth: useSelector(state => state.authReducer),
-    posts: useSelector(state => state.postsReducer),
-    ratings: useSelector(state => state.ratingsReducer)
-  });
-  const [loggedIn, setLoggedIn] = useState({
-    loggedIn: useSelector(state => state.authReducer.loggedIn)
-  });
-  const [loadingState, setLoading] = useState({
-    authLoad: useSelector(state => state.ratingsReducer.ratings),
-    postsLoad: useSelector(state => state.postsReducer.posts),
-    ratingsLoad: useSelector(state => state.authReducer.loggedIn)
-  });
-  
+  const {authState, postsState, ratingsState} = useSelector(state => ({
+    auth: state.authReducer,
+    posts: state.postsReducer,
+    ratings: state.ratingsReducer
+  }), shallowEqual);
+ 
+  const {authLoad, postsLoad, ratingsLoad, appLoad} = useSelector(state => ({
+    authLoad: state.ratingsReducer.loading,
+    postsLoad: state.postsReducer.loading,
+    ratingsLoad: state.authReducer.loading,
+    appLoad: false
+  }), shallowEqual);
 
   // const [allRatings, setAllRatings] = useState({ ratings: useSelector(state => state.ratingsReducer.ratings)})
   // const [allPosts, setAllPosts] = useState({ posts: useSelector(state => state.postsReducer.posts)})
@@ -59,8 +76,11 @@ function App2() {
     <div className="App">
       <div>
         <Hero>
-         
-          <GuestLanding reducerState = {reducerState} loadingState = {loadingState} loggedIn= {loggedIn}/>
+          <GuestLanding
+            // reducerState={reducerState}
+            // loadingState={loadingState}
+            // loggedIn={loggedIn}
+          />
         </Hero>
       </div>
     </div>

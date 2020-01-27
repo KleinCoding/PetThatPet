@@ -7,7 +7,7 @@ import SwimmingMedium from './SwimmingMedium.svg'
 import SwimmingTiny from './SwimmingTiny.svg'
 //User Profile Logos
 import WelcomeBackLarge from '../Welcome/WelcomeBackLarge.svg'
-
+import NewUserLarge from '../Logos/NewUser/WelcomeBackLarge.svg'
 
 //Landing Logos Below
 

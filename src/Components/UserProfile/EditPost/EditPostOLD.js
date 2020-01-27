@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { editPost } from '../../reducks/reducers/postsReducer'
+import { editPost } from '../../../reducks/reducers/postsReducer'
 
 class EditPost extends Component {
   constructor() {

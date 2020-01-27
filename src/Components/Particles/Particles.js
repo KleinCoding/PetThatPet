@@ -1,13 +1,10 @@
-import React, { useState, useRef, Fragment} from "react";
+import React, { useState, useRef, Fragment } from "react";
 import { useSpring, animated } from "react-spring";
 import ReactParticles from "react-particles-js";
 import "./stylesDisplay.scss";
 import Ellipsis from "../Loading/Loading";
 import { ReactQueryConfigProvider } from "react-query";
-import {useDelayNextChildren} from "../../Hooks/Hooks"
-
-
-
+import { useDelayNextChildren } from "../../Hooks/Hooks";
 
 const queryConfig = {
   suspense: true
@@ -19,30 +16,22 @@ export default function ParticleBox() {
   //Defines View and function to setView
   const [view, setView] = useState("landing");
   //Defines the dispatch function
-  
 
-  
-
-
-  
   return (
-    <div className ="main">
+    <div className="main">
       <main>
         <Hero></Hero>
-      </main></div>
-    
+      </main>
+    </div>
   );
- 
-  
 
   // function viewLogin() {
   //   return (
   //     <Particles>
   //       <Hero>
-  
-     
+
   //     <div className="container">
-        
+
   //     <div className="row">
   //        <div className="column">
   //       {/* <Hero3> */}
@@ -66,10 +55,12 @@ export default function ParticleBox() {
   //     </div>
   //      </Hero>
   //      </Particles>
-     
+
   //   );
   // }
 
+
+  
   function viewPost() {
     return (
       <div className="column">
@@ -86,7 +77,7 @@ export default function ParticleBox() {
                   <h3>{posts[variables.a].pet_name} has been petted X times</h3>
                
                 <button onClick={useRandomize}>Clicketh Me!</button> */}
-                 </div>
+                </div>
               </Card>
               <Hero2 />
               <Card>
@@ -121,15 +112,15 @@ export default function ParticleBox() {
     );
   }
 }
-export const  Card2 = ({ delay }) => {
-  const render = 
-  <div>
-    <Card></Card>
-  </div>;
+export const Card2 = ({ delay }) => {
+  const render = (
+    <div>
+      <Card></Card>
+    </div>
+  );
 
   return useDelayNextChildren(render, delay);
 };
-
 
 export function Card({ children }) {
   // We add this ref to card element and use in onMouseMove event ...
@@ -138,9 +129,8 @@ export function Card({ children }) {
   // Keep track of whether card is hovered so we can increment ...
   // ... zIndex to ensure it shows up above other cards when animation causes overlap.
   const [isHovered, setHovered] = useState(false);
-  const [] = useState()
+  const [] = useState();
   const [animatedProps, setAnimatedProps] = useSpring(() => {
-
     return {
       // Array containing [rotateX, rotateY, and scale] values.
       // We store under a single key (xys) instead of separate keys ...
@@ -155,7 +145,7 @@ export function Card({ children }) {
   return (
     <animated.div
       ref={ref}
-      className="card" 
+      className="card"
       onMouseEnter={() => setHovered(true)}
       onMouseMove={({ clientX, clientY }) => {
         // Get mouse x position within card
@@ -203,7 +193,7 @@ export function Card({ children }) {
 
 function Particles({ children, props }) {
   return (
-    <div className="actualParticles" >
+    <div className="actualParticles">
       <ReactParticles
         style={{
           position: "absolute",
@@ -272,4 +262,3 @@ function Hero3({ children }) {
 //     </div>
 //   );
 // }
-

@@ -4,7 +4,6 @@ import { getAllPosts } from "../../reducks/reducers/postsReducer";
 import { getAllRatings } from "../../reducks/reducers/ratingsReducer";
 import { getAllRatingsByUserId } from "../../reducks/reducers/ratingsReducer";
 import { getSession } from "../../reducks/reducers/authReducer";
-import PostCard from "../PostCard/PostCard";
 import Axios from "axios";
 import "../../App.css";
 
@@ -58,19 +57,6 @@ class Home extends Component {
     const postsMapped = postsCopy.map((post, i) => {
       return (
         <div key={i}>
-          <PostCard
-            user={post.user_id}
-            url={post.img_url}
-            pet_name={post.pet_name}
-            category_name={post.category_name}
-            post_id={post.post_id}
-            username={post.username}
-            ratings_user={this.props.ratingsUser}
-            currentPost={this.props.currentPost}
-            lockRating={this.lockRating}
-            initialValue={this.initialValue}
-            prevRated={this.prevRated}
-          />
         </div>
       );
     });

@@ -10,6 +10,12 @@ import WelcomeBackLarge from '../SVG/Logos/Welcome/WelcomeBackLarge.svg'
 import WelcomeBackMed from '../SVG/Logos/Welcome/WelcomeBackMed.svg'
 import WelcomeBackSmall from '../SVG/Logos/Welcome/WelcomeBackSmall.svg'
 import WelcomeBackTiny from '../SVG/Logos/Welcome/WelcomeBackTiny.svg'
+//NewUser Profile Logos
+import NewUserLarge from '../SVG/Logos/NewUser/NewUserLarge.svg'
+import NewUserMed from '../SVG/Logos/NewUser/NewUserMed.svg'
+import NewUserSmall from '../SVG/Logos/NewUser/NewUserSmall.svg'
+import NewUserTiny from '../SVG/Logos/NewUser/NewUserTiny.svg'
+
 
 //Icons
 import CatPaw3Large from '../SVG/Icons/catpaw3large.svg'
@@ -61,6 +67,28 @@ export function  LogoWelcomeBackTiny() {
     <object type="image/svg+xml" data={WelcomeBackTiny}>svg</object>
   );
 }
+
+//NewUser Profile Logos Below
+export function  LogoNewUserLarge() {
+  return (
+    <object type="image/svg+xml" data={NewUserLarge}>svg</object>
+  );
+  }
+export function  LogoNewUserMed() {
+  return (
+    <object type="image/svg+xml" data={NewUserMed}>svg</object>
+  );
+  }
+export function  LogoNewUserSmall() {
+  return (
+    <object type="image/svg+xml" data={NewUserSmall}>svg</object>
+  );
+  }
+export function  LogoNewUserTiny() {
+  return (
+    <object type="image/svg+xml" data={NewUserTiny}>svg</object>
+  );
+  }
 
 //Icons Below
 export function  IconCatPaw3Large() {
@@ -124,6 +152,14 @@ export const WelcomeLogo = () => (
       <Medium><LogoWelcomeBackMed /></Medium>
       <Small><LogoWelcomeBackSmall /></Small>
       <Tiny><LogoWelcomeBackTiny /></Tiny>
+    </div>
+  )
+export const NewUserLogo = () => (
+    <div>
+      <Large><NewUserLarge /></Large>
+      <Medium><NewUserMed /></Medium>
+      <Small><NewUserSmall /></Small>
+      <Tiny><NewUserTiny /></Tiny>
     </div>
   )
   

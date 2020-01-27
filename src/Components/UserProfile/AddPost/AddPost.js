@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addPost } from "../../reducks/reducers/postsReducer";
+import { addPost } from "../../../reducks/reducers/postsReducer";
 
 export default function AddPost() {
   const [category_name, setCategory_name] = useState("");

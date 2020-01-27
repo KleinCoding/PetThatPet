@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './ScrollContainer.css'
-import Home from "../Home/Home"
 import { getAllPosts } from "../../reducks/reducers/postsReducer";
 
 
@@ -24,7 +23,7 @@ class Viewer extends Component {
       <div className = "ScrollBox">
       <h1> This should be the image viewer</h1>
       
-      <Home /></div>
+  </div>
      
       </div>
     )

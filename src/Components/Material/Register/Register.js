@@ -9,31 +9,30 @@ import Link from "@material-ui/core/Link";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Hidden from "@material-ui/core/Hidden";
-import { loginUser } from "../../../reducks/reducers/authReducer";
+import { registerUser } from "../../../reducks/reducers/authReducer";
 import { useDispatch } from "react-redux";
 
-function DashboardLogin(props) {
+function DashboardRegister(props) {
   const dispatch = useDispatch();
-  const [loginState, setLoginState] = useState({
+  const [registerState, setRegisterState] = useState({
     username: "",
     password: ""
   });
-  const [attemptLogin, setAttemptLogin] = useState(null);
+  const [attemptRegister, setAttemptRegister] = useState(null);
 
-  function attemptToLogin() {
-    setAttemptLogin(loginState);
+  function attemptToRegister() {
+    setAttemptRegister(registerState);
     
-    props.AnimReset("profile")
-  }
-
-  function setRegister(){
-    props.setNewUser(true)
+    props.AnimReset("profile");
   }
 
   useEffect(() => {
-    dispatch(loginUser(attemptLogin));
-  }, [attemptLogin]);
+    dispatch(registerUser(attemptRegister));
+  }, [attemptRegister]);
 
+  function setLogin() {
+    props.setNewUser(false);
+  }
   return (
     <Grid
       className={"DL01-root"}
@@ -66,7 +65,7 @@ function DashboardLogin(props) {
           }
         /> */}
           <Typography color={"textSecondary"}>
-            Lets pet some pets y'all!
+            First time here? Join up!
           </Typography>
           <TextField
             fullWidth
@@ -74,7 +73,10 @@ function DashboardLogin(props) {
             margin={"normal"}
             variant="filled"
             onChange={e =>
-              setLoginState({ ...loginState, username: e.currentTarget.value })
+              setRegisterState({
+                ...registerState,
+                username: e.currentTarget.value
+              })
             }
           />
           <TextField
@@ -83,7 +85,10 @@ function DashboardLogin(props) {
             margin={"normal"}
             variant="filled"
             onChange={e =>
-              setLoginState({ ...loginState, password: e.currentTarget.value })
+              setRegisterState({
+                ...registerState,
+                password: e.currentTarget.value
+              })
             }
           />
           <FormControl fullWidth>
@@ -97,17 +102,16 @@ function DashboardLogin(props) {
               fullWidth
               variant={"contained"}
               color={"primary"}
-              onClick={attemptToLogin}
+              onClick={attemptToRegister}
             >
-              Log in
+              Sign Up Now!
             </Button>
             {/* <button onClick = {() => console.log("result", result)}>log result</button> */}
           </FormControl>
           <Typography className={"DL01-signUp"}>
-            Don't have an account ?
-
+            Already have an account? 
             <br />
-             <Link onClick = {setRegister}>Sign Up Now</Link>
+            <Link onClick={setLogin}>Come log in!</Link>
           </Typography>
         </form>
       </Grid>
@@ -115,7 +119,7 @@ function DashboardLogin(props) {
   );
 }
 
-DashboardLogin.getTheme = ({ palette, breakpoints }) => {
+DashboardRegister.getTheme = ({ palette, breakpoints }) => {
   const gradient = `linear-gradient(49deg, ${Color(palette.primary.main)
     .darken(0.7)
     .toString()} 0%, ${Color(palette.primary.main)
@@ -256,4 +260,4 @@ DashboardLogin.getTheme = ({ palette, breakpoints }) => {
   };
 };
 
-export default DashboardLogin;
+export default DashboardRegister;

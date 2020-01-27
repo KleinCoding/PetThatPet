@@ -1,27 +1,26 @@
 import React, { useState, useEffect } from "react";
 import "./Landing.scss";
-import {LandingLogo, WelcomeLogo, CatPaw3} from '../../Styles/SVG/Index'
+import { LandingLogo, WelcomeLogo, NewUserLogo, CatPaw3 } from "../../Styles/SVG/Index";
 import { Card2 } from "../Particles/ParticlesEMPTY";
 import Login from "../Login/Login";
 import Register from "../Register/Register";
 import "../../Styles/transition.css";
 import "../../Styles/loading.css";
 import { useInterval, useInterval2 } from "../../Hooks/Hooks";
-// Material UI Tests
-import DashboardLogin from "../Material/Login/Login"
-import PostCard from "../Material/Card/Card"
-import CarouselDisplay from "../Material/Carousel/Carousel"
+// Material UI 
+import DashboardLogin from "../Material/Login/Login";
+import DashboardRegister from "../Material/Register/Register"
 
 
-//Force Reflow function
-try {
+
+try {//Force Reflow function
   var forceReflowJS = (forceReflowJS = function(a) {
     "use strict";
     void a.offsetHeight;
   }).call.bind(
     Object.getOwnPropertyDescriptor(HTMLElement.prototype, "offsetHeight").get
   );
-} catch (e) {} 
+} catch (e) {}
 
 //Hooks used for animation states on GuestLanding
 export default function GuestLanding(props) {
@@ -44,18 +43,23 @@ export default function GuestLanding(props) {
   const [delay2, setDelay2] = useState(null);
   const [count, setCount] = useState(0);
   const [count2, setCount2] = useState(0);
+
   //Hook used to set View for loading page based on needed view
   const [view, setView] = useState("landing");
   const [view2, setView2] = useState("");
+
+  //Hook used to set view for Login or Register fields
+  const [isNewUser, setNewUser] = useState(false)
+
   //Hooks for calling classes for animation reflow functions
   const enterCard = document.querySelector("#cardEnter");
   const exitCard = document.querySelector("#cardExit");
   const enterLogo = document.querySelector("#logoEnter");
   const exitLogo = document.querySelector("#logoExit");
 
-  
-  //Sets exit animations to run,
-  //activates interval2 (forces animation reflows and view change on a timer) 
+  //Sets exit animations to run +
+  //activates interval2 
+  //(forces animation reflows and view change on a timer)
   function AnimReset(e) {
     setLandingPlayState({ ...landingPlayState, exit: "running" });
     setProfilePlayState({ ...profilePlayState, exit: "running" });
@@ -68,8 +72,9 @@ export default function GuestLanding(props) {
     cl.classList.remove("ld");
     forceReflowJS(cl);
     cl.classList.add("ld");
-    console.log(count, count2, "reflowONEfinished", cl);
+    console.log(count, count2, "reflowOneFinished", cl);
   }
+
 
   //useInterval hook sets an interval delay timer
   //useInterval1 sets starting values + engages animations on load
@@ -106,10 +111,11 @@ export default function GuestLanding(props) {
           logo: "paused"
         });
         if (count >= 4) {
-        setCount(0);
-        setDelay(null);
-        return;
-      }}
+          setCount(0);
+          setDelay(null);
+          return;
+        }
+      }
     },
     delay,
     count
@@ -127,18 +133,22 @@ export default function GuestLanding(props) {
         setLandingPlayState({ ...landingPlayState, exit: "paused" });
         setProfilePlayState({ ...profilePlayState, exit: "paused" });
       }
-      if (count2 === 2 ){
-        
-        setView(view2)
-
+      if (count2 === 2) {
+        setView(view2);
       }
       if (count2 === 2.5) {
-       
-        setLandingPlayState({...landingPlayState, logo: "running", card: "running" });
-        setProfilePlayState({...profilePlayState, logo: "running", card: "running"  });
+        setLandingPlayState({
+          ...landingPlayState,
+          logo: "running",
+          card: "running"
+        });
+        setProfilePlayState({
+          ...profilePlayState,
+          logo: "running",
+          card: "running"
+        });
       }
       if (count2 === 3.5) {
-       
         setLandingPlayState({
           card: "paused",
           exit: "paused",
@@ -148,23 +158,38 @@ export default function GuestLanding(props) {
           card: "paused",
           exit: "paused",
           logo: "paused"
-        })}
-        if(count2 === 4 ){
-            reflowOne(exitLogo)
-        reflowOne(exitCard)
+        });
+      }
+      if (count2 === 4) {
+        reflowOne(exitLogo);
+        reflowOne(exitCard);
         setCount2(0);
         setDelay2(null);
         return;
-      }}
-    ,
+      }
+    },
     delay2,
     count2
   );
 
+ //Determines view to load for user based on view variable defined above
+  //function called in GuestLanding return
+  //call animReset() and send the desired view in via a string EX: "landing"
   
+function GetView(view) {// Functional. Needs completion of ViewPosts
+    if (view === "landing") {
+      return ViewLanding();
+    } else if (view === "profile") {
+      return ViewProfile();
+      // } else if (view === "posts") {
+      //   return ViewPosts();
+    } else {
+      return ViewLanding();
+    }
+  }
 
-  //Default Return Value augmented by ReturnView function to display page
-  return (
+  
+  return (//Default Return Value augmented by ReturnView function
     <span id="svgbkg">
       <div style={{ width: "100vw" }}>
         <div
@@ -194,30 +219,13 @@ export default function GuestLanding(props) {
         {GetView(view)}
       </div>
     </span>
-  );
+  )
 
-  //Determines view to load for user based on view variable defined above
-  //function called in GuestLanding return
-  //call animReset() and send the desired view in via a string EX: "landing"
-  function GetView(view) {
-    if (view === "landing") {
-      return ViewLanding();
-    } else if (view === "profile") {
-      return ViewProfile();
-    // } else if (view === "register") {
-    //   return ViewRegister();
-    // } else if (view === "newUser") {
-    //   return ViewNewUser();
-    // } else if (view === "posts") {
-    //   return Viewposts();
-    } else {
-      return ViewLanding();
-    }
-  }
+ 
 
   //Each viewFunction() populates the default return with the necessary
   //elements to create the desired simulated "page"
-  function ViewProfile() {
+  function ViewProfile() { //Needs: AddPost, UserPosts, EditPosts
     return (
       <main>
         <div className="WelcomeSVGHolders">
@@ -240,7 +248,11 @@ export default function GuestLanding(props) {
               }}
             >
               <div className="welcomeBackHolder">
-                <WelcomeLogo  />
+              {isNewUser ? (
+                <NewUserLogo />
+              ) : (
+              <WelcomeLogo />
+              )}
               </div>
             </h1>
           </div>
@@ -248,24 +260,24 @@ export default function GuestLanding(props) {
         <div className="column">
           <div className="container">
             <div className="row">
-                <div
-                  id="cardEnter"
-                  className="welcomeCardEnter"
-                  class="ld ld-spring-ttb-in paused"
-                  style={{
-                    animationPlayState: `${profilePlayState.card}`,
-                    animationDuration: `1s`
-                  }}
-                > 
-                <div
-                id="cardExit"
-                className="welcomeCardExit"
-                class="ld ld-power-off paused"
+              <div
+                id="cardEnter"
+                className="welcomeCardEnter"
+                class="ld ld-spring-ttb-in paused"
                 style={{
-                  animationPlayState: `${profilePlayState.exit}`,
-                  animationDuration: `0.5s`
+                  animationPlayState: `${profilePlayState.card}`,
+                  animationDuration: `1s`
                 }}
               >
+                <div
+                  id="cardExit"
+                  className="welcomeCardExit"
+                  class="ld ld-power-off paused"
+                  style={{
+                    animationPlayState: `${profilePlayState.exit}`,
+                    animationDuration: `0.5s`
+                  }}
+                >
                   <Card2>
                     <Login />
                   </Card2>
@@ -288,8 +300,11 @@ export default function GuestLanding(props) {
         </div>
       </main>
     );
-  }
-  function ViewLanding() {
+  } /// Function closure
+
+
+
+  function ViewLanding() {// Includes: Landing, Login, Register. 100%
     return (
       <main>
         <div className="SVGHolders">
@@ -309,60 +324,102 @@ export default function GuestLanding(props) {
               style={{
                 animationPlayState: `${landingPlayState.logo}`,
                 animationDuration: `1.5s`
-              }}>
+              }}
+            >
+              
               <LandingLogo />
             </div>
           </h1>
         </div>
-        <div className="column">
-          <div className="container">
-            <div className="row">
-              <div
-                id="cardExit"
-                className="landingCardExit"
-                class="ld ld-power-off paused"
-                style={{
-                  animationPlayState: `${landingPlayState.exit}`,
-                  animationDuration: `0.5s`
-                }}
-              >
+
+        {isNewUser ? (
+          
+          <div className="column">
+            <div className="container">
+              <div className="row">
                 <div
-                  id="cardEnter"
-                  className="landingCardEnter"
-                  class="ld ld-power-on paused"
+                  id="cardExit"
+                  className="landingCardExit"
+                  class="ld ld-power-off paused"
                   style={{
-                    animationPlayState: `${landingPlayState.card}`,
-                    animationDuration: `1s`
+                    animationPlayState: `${landingPlayState.exit}`,
+                    animationDuration: `0.5s`
                   }}
                 >
-                  <Card2>
-                    <DashboardLogin AnimReset={AnimReset}/>
-                  </Card2>
-                  <button
-                    onClick={() => {
-                      AnimReset("profile");
+                  <div
+                    id="cardEnter"
+                    className="landingCardEnter"
+                    class="ld ld-power-on paused"
+                    style={{
+                      animationPlayState: `${landingPlayState.card}`,
+                      animationDuration: `1s`
                     }}
                   >
-                    reset ALL ANIM to LANDING
-                  </button>
-                  <br />
-                  <br />
+                    <Card2>
+                      <DashboardRegister AnimReset={AnimReset} setNewUser = {setNewUser} />
+                    </Card2>
+                    <button
+                      onClick={() => {
+                        AnimReset("profile");
+                      }}
+                    >
+                      reset ALL ANIM to LANDING
+                    </button>
+                    <br />
+                    <br />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> //Ternary closure
+        ) : (
+          <div className="column">
+            <div className="container">
+              <div className="row">
+                <div
+                  id="cardExit"
+                  className="landingCardExit"
+                  class="ld ld-power-off paused"
+                  style={{
+                    animationPlayState: `${landingPlayState.exit}`,
+                    animationDuration: `0.5s`
+                  }}
+                >
+                  <div
+                    id="cardEnter"
+                    className="landingCardEnter"
+                    class="ld ld-power-on paused"
+                    style={{
+                      animationPlayState: `${landingPlayState.card}`,
+                      animationDuration: `1s`
+                    }}
+                  >
+                    <Card2>
+                      <DashboardLogin AnimReset={AnimReset} setNewUser = {setNewUser} />
+                    </Card2>
+                    <button
+                      onClick={() => {
+                        AnimReset("profile");
+                      }}
+                    >
+                      reset ALL ANIM to LANDING
+                    </button>
+                    <br />
+                    <br />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </main>
-    );
-  }
-  function ViewRegister(){
-  }
-  function ViewNewUser(){
-  }
-  function ViewPosts(){
-  }
+          //Ternary Closure
+        )}  
+        
+      </main> //Body closure
+    ); //Return closure
+  } //Function closure
+
+  
+ 
+  function ViewPosts() {}/// Needs all
 }
 
-
-
- 

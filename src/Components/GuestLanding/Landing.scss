@@ -1,6 +1,6 @@
 
 
-#svgbkg {
+.bkg1.svgbkg {
     display: flex;
     height: 100%;
     width: 100%;
@@ -22,6 +22,33 @@
      }
       @media screen and (min-width: 1080px) {
         background-image: url(../../Styles/SVG/Backgrounds/paw1.svg); 
+        background-size: 55%;
+        display: unset;
+      }
+}
+
+.bkg2.svgbkg {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    background-size: 90%;
+    background-position: 50% 50%;
+    background-repeat: repeat;
+    background-image: url(../../Styles/SVG/Backgrounds/COLORSPawBeat1scaled.svg); 
+    flex-wrap: wrap;
+    // text-align-last: center;
+    @media screen and (max-width: 600px) {
+        background-image: url(../../Styles/SVG/Backgrounds/heart1.svg); 
+        background-size: 60%;
+        display: unset;
+      }
+      @media only screen and (min-width: 601px) and (max-width:1079px){
+        background-image: url(../../Styles/SVG/Backgrounds/rabbit1.svg); 
+        background-size: 100%;
+        display: unset;
+     }
+      @media screen and (min-width: 1080px) {
+        background-image: url(../../Styles/SVG/Backgrounds/COLORSPawBeat1scaled.svg); 
         background-size: 55%;
         display: unset;
       }

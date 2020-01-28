@@ -25,7 +25,7 @@ export default function EditPost() {
 
     return (
       <div>
-        <h1>Edit DevNote</h1>
+        <h1>Edit Your PetPost</h1>
         <input name="title" placeholder="Title" onChange= {(e) => setTitle(e.currentTarget.value) }/>
         <input name="content" placeholder="Content" onChange= {(e) => setContent(e.currentTarget.value) }/>
         <button onClick={handleEditPost}>Save Changes</button>

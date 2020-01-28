@@ -4,36 +4,29 @@ const initialState = {
   posts: [],
   loading: false,
   currentPost_id: 0,
+  postsByCategory: [],
+  postsByUserId: [],
   randPosts: []
 }
 
+//Posts calls
 const GET_ALL_POSTS = "GET_ALL_POSTS";
 const GET_CURRENT_POST = "GET_CURRENT_POST"
+const GET_ALL_POSTS_BY_USER_ID = "GET_ALL_POSTS_BY_USER_ID"
+const GET_ALL_POSTS_BY_CATEGORY_NAME = "GET_ALL_POSTS_BY_CATEGORY_NAME";
+const GET_RANDOM_POSTS = "GET_RANDOM_POSTS"
+
+//Add/Edit/Delete
 const ADD_POST = "ADD_POST";
 const ADD_POST_COUNT = "ADD_POST_COUNT"
 const EDIT_POST = "EDIT_POST";
 const DELETE_POST = "DELETE_POST";
-const GET_ALL_POSTS_BY_CATEGORY_NAME = "GET_ALL_POSTS_BY_CATEGORY_NAME";
-const GET_RANDOM_POSTS = "GET_RANDOM_POSTS"
+
 
 export function getAllPosts() {
   return {
     type: GET_ALL_POSTS,
     payload: Axios.get("/api/posts")
-  }
-}
-
-export function addPost(post) {
-  return {
-    type: ADD_POST,
-    payload: Axios.post("/api/posts", post)
-  }
-}
-
-export function addPostCount(post_id) {
-  return {
-    type: ADD_POST_COUNT,
-    payload: Axios.post(`/api/post/${post_id}`)
   }
 }
 
@@ -43,6 +36,44 @@ export function getCurrentPost(post_id) {
   payload: Axios.get(`/api/post/${post_id}`)
   }
 }
+
+export function getAllPostsByCategoryName(category_name) {
+  return {
+    type: GET_ALL_POSTS_BY_CATEGORY_NAME,
+    payload: Axios.get(`/api/posts/${category_name}`)
+  }
+}
+
+export function getAllPostsByUserId(user_id) {
+  return {
+    type: GET_ALL_POSTS_BY_USER_ID,
+    payload: Axios.get(`/api/userposts/${user_id}`)
+  }
+}
+
+export function getRandomPosts(amount) {
+  return {
+    type: GET_RANDOM_POSTS,
+    payload: Axios.get(`/api/posts/${amount}`)
+  }
+}
+
+
+export function addPost(post) {
+  return {
+    type: ADD_POST,
+    payload: Axios.post("/api/posts", post)
+  }
+}
+
+export function addPostCount(user_id) {
+  return {
+    type: ADD_POST_COUNT,
+    payload: Axios.put(`/api/count/${user_id}`)
+  }
+}
+
+
 
 export function editPost(post_id, updated_post) {
   return {
@@ -58,19 +89,6 @@ export function deletePost(post_id) {
   }
 }
 
-export function getAllPostsByCategoryName(category_name) {
-  return {
-    type: GET_ALL_POSTS_BY_CATEGORY_NAME,
-    payload: Axios.get(`/api/posts/${category_name}`)
-  }
-}
-
-export function getRandomPosts(amount) {
-  return {
-    type: GET_RANDOM_POSTS,
-    payload: Axios.get(`/api/posts/${amount}`)
-  }
-}
 
 export default function reducer(state = initialState, action) {
   const { type, payload } = action;
@@ -87,6 +105,32 @@ export default function reducer(state = initialState, action) {
         ...state,
         loading: false,
         posts: payload.data
+      }
+    }
+    case `${GET_ALL_POSTS_BY_CATEGORY_NAME}_PENDING`: {
+      return {
+        ...state,
+        loading: true
+      }
+    }
+    case `${GET_ALL_POSTS_BY_CATEGORY_NAME}_FULFILLED`: {
+      return {
+        ...state,
+        loading: false,
+        postsByCategory: payload.data
+      }
+    }
+    case `${GET_ALL_POSTS_BY_USER_ID}_PENDING`: {
+      return {
+        ...state,
+        loading: true
+      }
+    }
+    case `${GET_ALL_POSTS_BY_USER_ID}_FULFILLED`: {
+      return {
+        ...state,
+        loading: false,
+        postsByUserId: payload.data
       }
     }
     case `${GET_RANDOM_POSTS}_PENDING`: {

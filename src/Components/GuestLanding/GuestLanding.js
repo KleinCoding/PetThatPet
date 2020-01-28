@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./Landing.scss";
 import { LandingLogo, WelcomeLogo, NewUserLogo, CatPaw3 } from "../../Styles/SVG/Index";
 import { Card2 } from "../Particles/ParticlesEMPTY";
-import Login from "../Login/Login";
-import Register from "../Register/Register";
+import AddPost from "../UserProfile/AddPost/AddPost"
+// import EditPost from "../UserProfile/EditPost/EditPost"
 import "../../Styles/transition.css";
 import "../../Styles/loading.css";
 import { useInterval, useInterval2 } from "../../Hooks/Hooks";
@@ -44,6 +44,9 @@ export default function GuestLanding(props) {
   const [count, setCount] = useState(0);
   const [count2, setCount2] = useState(0);
 
+  //Hook used for image upload status in Add Post passed as prop
+  // const [submitReady, setSubmitReady] = useState(false)
+
   //Hook used to set View for loading page based on needed view
   const [view, setView] = useState("landing");
   const [view2, setView2] = useState("");
@@ -56,7 +59,7 @@ export default function GuestLanding(props) {
   const exitCard = document.querySelector("#cardExit");
   const enterLogo = document.querySelector("#logoEnter");
   const exitLogo = document.querySelector("#logoExit");
-
+  const bkg = document.querySelector("#wallpaper")
   //Sets exit animations to run +
   //activates interval2 
   //(forces animation reflows and view change on a timer)
@@ -72,8 +75,16 @@ export default function GuestLanding(props) {
     cl.classList.remove("ld");
     forceReflowJS(cl);
     cl.classList.add("ld");
-    console.log(count, count2, "reflowOneFinished", cl);
+    console.log(count, count2, "reflowONE finished");
   }
+
+  function reflowBKG(cl) {
+    cl.classList.remove("bkg1");
+    forceReflowJS(cl);
+    cl.classList.add("bkg2");
+    console.log(count, count2, "reflowBKG Finished");
+  }
+
 
 
   //useInterval hook sets an interval delay timer
@@ -82,6 +93,7 @@ export default function GuestLanding(props) {
   useInterval(
     () => {
       if (count <= 10) {
+        
         setCount(count + 0.5);
       }
       if (count <= 1) {
@@ -126,6 +138,7 @@ export default function GuestLanding(props) {
         setCount2(count2 + 0.5);
       }
       if (count2 === 1) {
+        reflowBKG(bkg)
         reflowOne(enterCard);
         reflowOne(enterLogo);
       }
@@ -190,7 +203,12 @@ function GetView(view) {// Functional. Needs completion of ViewPosts
 
   
   return (//Default Return Value augmented by ReturnView function
-    <span id="svgbkg">
+    <span id="wallpaper" class= "bkg1 svgbkg" 
+    style={{
+      animationPlayState: `${iconPlayState}`,
+      animationDuration: `2.5s`
+    }}
+  >
       <div style={{ width: "100vw" }}>
         <div
           id="iconHolder"
@@ -212,7 +230,7 @@ function GetView(view) {// Functional. Needs completion of ViewPosts
               animationDuration: `2.5s`
             }}
           >
-            <br />
+            
             <CatPaw3 />
           </div>
         </div>
@@ -225,7 +243,8 @@ function GetView(view) {// Functional. Needs completion of ViewPosts
 
   //Each viewFunction() populates the default return with the necessary
   //elements to create the desired simulated "page"
-  function ViewProfile() { //Needs: AddPost, UserPosts, EditPosts
+
+  function ViewProfile() { // 30% Needs: UserPosts, EditPosts
     return (
       <main>
         <div className="WelcomeSVGHolders">
@@ -279,12 +298,12 @@ function GetView(view) {// Functional. Needs completion of ViewPosts
                   }}
                 >
                   <Card2>
-                    <Login />
+                    <AddPost AnimReset={AnimReset} />
                   </Card2>
                   <br />
                   <br />
                   <Card2>
-                    <Register />
+                    
                   </Card2>
                   <button
                     onClick={() => {
@@ -304,7 +323,7 @@ function GetView(view) {// Functional. Needs completion of ViewPosts
 
 
 
-  function ViewLanding() {// Includes: Landing, Login, Register. 100%
+  function ViewLanding() {// 100% - Includes: Landing, Login, Register. 
     return (
       <main>
         <div className="SVGHolders">
@@ -358,15 +377,14 @@ function GetView(view) {// Functional. Needs completion of ViewPosts
                     <Card2>
                       <DashboardRegister AnimReset={AnimReset} setNewUser = {setNewUser} />
                     </Card2>
-                    <button
+                    {/* <button
                       onClick={() => {
                         AnimReset("profile");
                       }}
                     >
                       reset ALL ANIM to LANDING
-                    </button>
-                    <br />
-                    <br />
+                    </button> */}
+                 
                   </div>
                 </div>
               </div>
@@ -397,13 +415,13 @@ function GetView(view) {// Functional. Needs completion of ViewPosts
                     <Card2>
                       <DashboardLogin AnimReset={AnimReset} setNewUser = {setNewUser} />
                     </Card2>
-                    <button
+                    {/* <button
                       onClick={() => {
                         AnimReset("profile");
                       }}
                     >
                       reset ALL ANIM to LANDING
-                    </button>
+                    </button> */}
                     <br />
                     <br />
                   </div>
@@ -420,6 +438,6 @@ function GetView(view) {// Functional. Needs completion of ViewPosts
 
   
  
-  function ViewPosts() {}/// Needs all
+  function ViewPosts() {}// 0% -- Needs all
 }
 

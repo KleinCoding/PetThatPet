@@ -2,11 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const massive = require("massive");
 const session = require("express-session");
-const AWS = require('aws-sdk');
-const fs = require('fs');
-const fileType = require('file-type');
-const bluebird = require('bluebird');
-const multiparty = require('multiparty');
+
 
 
 //Server assignment deconstruction
@@ -52,7 +48,8 @@ massive(CONNECTION_STRING).then(db => {
 // De-structured controllers
 const { user, registerUser, loginUser, logoutUser, getCurrentUser } = ac;
 const { allRatings, addRating, editRating, allRatingsByUserId} = rc
-const { allPosts, addPostCount, addPost, editPost, deletePost, allPostsByCategoryName, postsById, getRandomPosts } = pc;
+const { allPosts, getAllPostsByUserId, addPostCount, addPost, editPost, deletePost, allPostsByCategoryName, postById, getRandomPosts } = pc;
+
 // Auth Endpoints
 app.get("/auth/user", user); //Works
 app.get("/auth/user/:user_id", getCurrentUser); //Works, excludes password hash
@@ -61,11 +58,14 @@ app.post("/auth/login", loginUser); // Works
 app.get("/auth/logout", logoutUser); //Works
 
 // Posts Endpoints
+// Editing post COUNT: singular api/post. Editing full POST: plural api/posts
+// NOTE: /api/randposts and /api/userposts for those pulls.
 app.get("/api/posts",  allPosts); // Works -- auth.usersOnly,
-app.get("/api/post/:post_id",  postsById) //Works
-app.put("/api/post/:post_id", addPostCount)
+app.get("/api/post/:post_id",  postById) //Works
+app.put("/api/count/:user_id", addPostCount) //Works in postman
 app.get("/api/randposts/:amount",  getRandomPosts) //Works
 app.get("/api/posts/:category_name", allPostsByCategoryName) //Works
+app.get("/api/userposts/:user_id", getAllPostsByUserId) // Working Postman
 app.post("/api/posts",  addPost); //Works 
 app.put("/api/posts/:post_id",  editPost); //Works, allows edit img url and pet name
 app.delete("/api/posts/:post_id",  deletePost); //Works
@@ -78,6 +78,7 @@ app.put("/api/ratings/:post_id",  editRating) //Works
 
 // S3 Endpoint
 app.get('/api/media/sign-s3', sc.getSigned)
+app.get('/api/media/detectlabel', sc.doTheThing)
 
 app.listen(SERVER_PORT, () => {
   console.log(`LOFI RADIO STATION #: ${SERVER_PORT}`)

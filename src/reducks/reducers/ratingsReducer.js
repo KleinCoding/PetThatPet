@@ -74,6 +74,7 @@ export default function reducer(state = initialState, action) {
     case `${GET_ALL_RATINGS}_FULFILLED`: {
       return {
         ...state,
+        loading: false,
         ratings: payload.data
       }
     }

@@ -13,7 +13,7 @@ async function user(req, res) {
 
 async function getCurrentUser(req, res) {
   //Pulls user from users table. This is for the post_count integer value
-  const user_id= req.params.user_id;
+  const user_id= req.session.user.user_id;
   const db = req.app.get("db");
 
   const currentUser = await db.auth.getCurrentUser(user_id)

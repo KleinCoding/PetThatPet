@@ -3,7 +3,7 @@ import Axios from 'axios';
 const initialState = {
   currentUser_id: null,
   currentUsername: null,
-  currentUser: null,
+  currentUser: {},
   loading: false,
   loggedIn: false
 }
@@ -69,8 +69,6 @@ export default function reducer(state = initialState, action) {
       }
     }
 
-
-
     case `${GET_SESSION}_PENDING`: {
       return {
         ...state,
@@ -82,7 +80,6 @@ export default function reducer(state = initialState, action) {
         ...state,
         currentUser_id: payload.data.user_id,
         currentUsername: payload.data.username,
-        
         loading: false
       }
     }
@@ -95,15 +92,14 @@ export default function reducer(state = initialState, action) {
     case `${REGISTER_USER}_FULFILLED`: {
       return {
         ...state,
+        loading: false,
         user_id: payload.data.user_id,
-        username: payload.data.user,
-        loading: false
+        username: payload.data.user
       }
     }
     case `${LOGIN_USER}_PENDING`: {
       return {
-        ...state,
-        loading: true
+        ...state
       }
     }
     case `${LOGIN_USER}_FULFILLED`: {

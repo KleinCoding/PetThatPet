@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Axios from "axios";
-import { responsiveFontSizes } from "@material-ui/core";
-import { useDispatch } from "react-redux";
 
 //CUSTOM HOOKS
 //

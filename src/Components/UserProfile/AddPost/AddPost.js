@@ -86,9 +86,10 @@ export default function AddPost(props) {
       <form>
         <h1>Add a pet</h1>
         <br />
-
+<br/>
         {labelData.loading ? (
           <div>Please Select a Photo to get AWS Rekognition Categories</div>
+          
         ) : (
           <div>
             <select onChange={e => setCategory_name(e.currentTarget.value)}>
@@ -126,6 +127,8 @@ export default function AddPost(props) {
         />
         <input type="hidden" value={img_url} />
       </form>
+
+      <br />
       {submitReady ? (
         <button onClick={handleAddPost}> Submit </button>
       ) : (

@@ -17,6 +17,14 @@ export default function EditPost(props) {
     setEditState(false);
     props.setView("profile");
  }
+ const handleChangeView = () => {
+    const post_id = props.postId;
+    const pet_name = title
+    const updated_post = {pet_name: pet_name}
+    
+    setEditState(false);
+    props.setView("profile");
+ }
  const handleDeletePost= () => {
     const post_id = props.postId;
     console.log("handleDeletePost, editPost.js", post_id)
@@ -53,6 +61,8 @@ export default function EditPost(props) {
  <button onClick={setDeleteState}>Delete Post</button>
 </div>
       )}
-    </div></div>
+    </div>
+    <button onClick ={handleChangeView}>To Profile</button>
+    </div>
   );
 }

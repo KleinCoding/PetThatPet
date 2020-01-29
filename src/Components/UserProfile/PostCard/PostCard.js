@@ -13,7 +13,7 @@ export function PostCard(props){
           {props.statePosts[props.post].pet_name}'s Human goes by
           {props.statePosts[props.post].username}
         </h2>
-        <h3>{props.statePosts[props.post].pet_name} has been petted X times</h3>
+        {/* <h3>{props.statePosts[props.post].pet_name} has been petted X times</h3> */}
      
         
       </div>
@@ -32,7 +32,7 @@ export function PostCardUser(props){
               src={props.statePostsUser[props.userPost].img_url}
               alt="pet"
             ></img>
-            <h3>{props.statePostsUser[props.userPost].pet_name} has been petted X times</h3>
+            {/* <h3>{props.statePostsUser[props.userPost].pet_name} has been petted X times</h3> */}
             
           </div>
     )

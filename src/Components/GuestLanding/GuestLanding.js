@@ -11,7 +11,6 @@ import {
 import { Card2 } from "../Particles/ParticlesEMPTY";
 import AddPost from "../UserProfile/AddPost/AddPost";
 import EditPost from "../UserProfile/EditPost/EditPost";
-// import EditPost from "../UserProfile/EditPost/EditPost"
 import "../../Styles/transition.css";
 import "../../Styles/loading.css";
 import { useInterval, useInterval2 } from "../../Hooks/Hooks";
@@ -198,7 +197,7 @@ export default function GuestLanding(props) {
         setCount2(count2 + 0.5);
       }
       if (count2 === 1) {
-        reflowBKG(bkg);
+       
         reflowOne(enterCard);
         reflowOne(enterLogo);
       }
@@ -292,12 +291,14 @@ export default function GuestLanding(props) {
               animationPlayState: `${iconPlayState}`,
               animationDuration: `2.5s`
             }}
+            // onClick={setView("profile")}
           >
             <CatPaw3 />
           </div>
         </div>
         {GetView(view)}
       </div>
+      
     </span>
   );
 
@@ -529,7 +530,7 @@ export default function GuestLanding(props) {
                         post={post}
                         
                       />
-                       <button onClick={randomize}>View your next pet</button>
+                       <button onClick={randomize}>View another pet</button>
                   
                   </Card2>
                   <br />

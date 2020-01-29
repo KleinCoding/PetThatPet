@@ -36,8 +36,8 @@ const doTheThing = (req, res) => {
         Name: `userPhotos/${fileName}`
       }
     },
-    MaxLabels: 25,
-    MinConfidence: 80
+    MaxLabels: 4,
+    MinConfidence: 92
   };
   rekognition.detectLabels(rekogParams, (err, data) => {
     if (err) {

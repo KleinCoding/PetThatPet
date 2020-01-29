@@ -54,7 +54,7 @@ function App2() {
     <div className="App">
       <div>
         <Hero>
-          <GuestLanding
+          <GuestLanding postsLoading={postsLoad}
           />
           
         </Hero>

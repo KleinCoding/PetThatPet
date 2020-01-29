@@ -1,7 +1,7 @@
 import Axios from "axios";
 
 const initialState = {
-  posts: [],
+  posts: {},
   loading: false,
   currentPost_id: 0,
   postsByCategory: [],
@@ -75,10 +75,10 @@ export function addPostCount(user_id) {
 
 
 
-export function editPost(post_id, updated_post) {
+export function editPost(post_id, pet_name) {
   return {
     type: EDIT_POST,
-    payload: Axios.put(`/api/posts/${post_id}`, updated_post)
+    payload: Axios.put(`/api/posts/${post_id}`, pet_name)
   }
 }
 

@@ -71,7 +71,7 @@ async function addPostCount(req, res) {
 
 
 async function editPost(req, res) {
-  const { pet_name, img_url } = req.body;
+  const { pet_name } = req.body;
   const post_id = +req.params.post_id;
   const user_id = req.session.user.user_id;
 
@@ -79,7 +79,6 @@ async function editPost(req, res) {
 
   const editedPost = await db.posts.editPost([
     pet_name,
-    img_url,
     post_id,
     user_id,
   ])
@@ -92,7 +91,7 @@ async function deletePost(req, res) {
   const post_id = +req.params.post_id;
   const user_id = req.session.user.user_id;
   const db = req.app.get("db");
-
+console.log("Deleting Post in postsController")
   const updatedPosts = await db.posts.deletePost([post_id, user_id])
 
   res.status(200).json(updatedPosts);

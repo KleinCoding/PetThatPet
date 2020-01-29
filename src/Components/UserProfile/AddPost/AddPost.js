@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addPost, addPostCount } from "../../../reducks/reducers/postsReducer";
 import axios from "axios";
-// import {doProcess} from "./Rekog"
-import { doTheThing } from "./Rekog3";
 
 export default function AddPost(props) {
   const [category_name, setCategory_name] = useState("");
@@ -11,7 +9,7 @@ export default function AddPost(props) {
   const [pet_name, setPet_name] = useState("");
   const [img_url, setImg_url] = useState("");
   const [imgName, setImgName] = useState("");
-
+  const [labelData, setLabelData] = useState({ loading: true });
   const dispatch = useDispatch();
 
   const currentUser = useSelector(state => state.authReducer.currentUser);
@@ -22,7 +20,10 @@ export default function AddPost(props) {
       dispatch(addPost({ category_name, pet_name, img_url }));
       dispatch(addPostCount());
       setSubmitReady(false);
+      alert("Post Uploaded!")
+      // props.setViewPosts(false)
       props.AnimReset("profile");
+
     } else {
       alert(
         "Please make sure you have selected an image file and provided a name!"
@@ -37,6 +38,7 @@ export default function AddPost(props) {
     const userID = [currentUser[0].user_id];
     const var1 = `${file.type}`.replace("image/", "");
     const fileName = `user${userID}-post${postCount}.${var1}`;
+
     console.log([currentUser[0].post_count]);
     console.log(
       "fileOnChange postCount userID fileName",
@@ -51,9 +53,6 @@ export default function AddPost(props) {
       axios
         .get(`/api/media/sign-s3?fileName=${fileName}&file-type=${file.type}`)
         .then(resSigned => {
-          console.log("file", file);
-          console.log("fileName", fileName);
-          console.log("files", files);
           axios
             .put(resSigned.data.signedRequest, file, {
               headers: {
@@ -62,14 +61,14 @@ export default function AddPost(props) {
               }
             })
             .then(resUpload => {
-              setImg_url(resSigned.data.url);
+              setImg_url(`https://pet-that-pet.s3.us-east-2.amazonaws.com/userPhotos/${fileName}`);
               setImgName(fileName);
-              axios.get(`/api/media/detectlabel?fileName=${fileName}`)
-              .then(res => {
-                console.log(res.data);
-              });
-              console.log(fileName, file);
-              console.log(resSigned);
+              axios
+                .get(`/api/media/detectlabel?fileName=${fileName}`)
+                .then(res => {
+                  setLabelData({ data: res.data, loading: false });
+                  setSubmitReady(true)
+                });
               console.log(resSigned.data.url);
             })
             .catch(err => {
@@ -86,12 +85,31 @@ export default function AddPost(props) {
     <div>
       <form>
         <h1>Add a pet</h1>
-        <input
-          name="category_name"
-          placeholder="Animal"
-          value={category_name}
-          onChange={e => setCategory_name(e.target.value)}
-        />
+        <br />
+
+        {labelData.loading ? (
+          <div>Please Select a Photo to get AWS Rekognition Categories</div>
+        ) : (
+          <div>
+            <select onChange={e => setCategory_name(e.currentTarget.value)}>
+              <option
+                key={labelData.data.Labels[0].Name}
+                value={labelData.data.Labels[0].Name}>
+                {labelData.data.Labels[0].Name}
+              </option>
+              <option
+                key={labelData.data.Labels[1].Name}
+                value={labelData.data.Labels[1].Name}>
+                {labelData.data.Labels[1].Name}
+              </option>
+              <option
+                key={labelData.data.Labels[2].Name}
+                value={labelData.data.Labels[2].Name}>
+                {labelData.data.Labels[2].Name}
+              </option>
+            </select>
+          </div>
+        )}
         <input
           name="pet_name"
           placeholder="Pet Name"
@@ -113,7 +131,6 @@ export default function AddPost(props) {
       ) : (
         <h1>Please Add a Photo</h1>
       )}
-      <button onClick={() => doTheThing()}>AWS check</button>
     </div>
   );
 }

@@ -1,19 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense, lazy } from "react";
+import { useSelector, shallowEqual, useDispatch } from "react-redux";
+import { getAllPosts } from "../../reducks/reducers/postsReducer";
 import "./Landing.scss";
-import { LandingLogo, WelcomeLogo, NewUserLogo, CatPaw3 } from "../../Styles/SVG/Index";
+import {
+  LandingLogo,
+  WelcomeLogo,
+  NewUserLogo,
+  CatPaw3
+} from "../../Styles/SVG/Index";
 import { Card2 } from "../Particles/ParticlesEMPTY";
-import AddPost from "../UserProfile/AddPost/AddPost"
+import AddPost from "../UserProfile/AddPost/AddPost";
+import EditPost from "../UserProfile/EditPost/EditPost";
 // import EditPost from "../UserProfile/EditPost/EditPost"
 import "../../Styles/transition.css";
 import "../../Styles/loading.css";
 import { useInterval, useInterval2 } from "../../Hooks/Hooks";
-// Material UI 
+// Material UI
 import DashboardLogin from "../Material/Login/Login";
-import DashboardRegister from "../Material/Register/Register"
+import DashboardRegister from "../Material/Register/Register";
+import { PostCard } from "../UserProfile/PostCard/PostCard";
+import { PostCardUser } from "../UserProfile/PostCard/PostCard";
 
-
-
-try {//Force Reflow function
+try {
+  //Force Reflow function
   var forceReflowJS = (forceReflowJS = function(a) {
     "use strict";
     void a.offsetHeight;
@@ -22,8 +31,32 @@ try {//Force Reflow function
   );
 } catch (e) {}
 
+// const PostCard = lazy(() => import("../UserProfile/PostCard/PostCard"));
+// const PostCardUser = lazy(() => import("../UserProfile/PostCard/PostCard"));
 //Hooks used for animation states on GuestLanding
 export default function GuestLanding(props) {
+  //Hooks to pull posts and userPosts into state.
+  const posts = useSelector(state => state.postsReducer.posts, shallowEqual);
+  const postsUser = useSelector(
+    state => state.postsReducer.postsByUserId,
+    shallowEqual
+  );
+  const [statePosts, setStatePosts] = useState(posts);
+  const [statePostsUser, setStatePostsUser] = useState(posts);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllPosts());
+  }, [posts]);
+
+  useEffect(() => {
+    setStatePosts(posts);
+  }, [posts]);
+
+  useEffect(() => {
+    setStatePostsUser(postsUser);
+  }, [postsUser]);
+
   const [iconPlayState, setIconPlayState] = useState("paused");
   const [landingPlayState, setLandingPlayState] = useState({
     card: "paused",
@@ -44,24 +77,30 @@ export default function GuestLanding(props) {
   const [count, setCount] = useState(0);
   const [count2, setCount2] = useState(0);
 
+  const [post, setPost] = useState(0);
+
+  const [userPost, setUserPost] = useState(0);
+
   //Hook used for image upload status in Add Post passed as prop
   // const [submitReady, setSubmitReady] = useState(false)
 
   //Hook used to set View for loading page based on needed view
   const [view, setView] = useState("landing");
   const [view2, setView2] = useState("");
+  const [viewPosts, setViewPosts] = useState(true);
 
   //Hook used to set view for Login or Register fields
-  const [isNewUser, setNewUser] = useState(false)
+  const [isNewUser, setNewUser] = useState(false);
 
   //Hooks for calling classes for animation reflow functions
   const enterCard = document.querySelector("#cardEnter");
   const exitCard = document.querySelector("#cardExit");
   const enterLogo = document.querySelector("#logoEnter");
   const exitLogo = document.querySelector("#logoExit");
-  const bkg = document.querySelector("#wallpaper")
+  const bkg = document.querySelector("#wallpaper");
+
   //Sets exit animations to run +
-  //activates interval2 
+  //activates interval2
   //(forces animation reflows and view change on a timer)
   function AnimReset(e) {
     setLandingPlayState({ ...landingPlayState, exit: "running" });
@@ -85,7 +124,29 @@ export default function GuestLanding(props) {
     console.log(count, count2, "reflowBKG Finished");
   }
 
+  function randomize() {
+    let a = Math.floor(Math.random() * posts.length);
+    if (a !== post) {
+      setPost(a);
+      if (a === posts.length) {
+        setPost(0);
+      }
+    } else {
+      randomize();
+    }
+  }
 
+  function ownerCycle() {
+    let b = userPost;
+    console.log("ownerCycle");
+    if (b !== postsUser.length - 1) {
+      setUserPost(b + 1);
+      console.log("adding 1 to owner cycle");
+    } else {
+      console.log("setting ownercycle to 0");
+      setUserPost(0);
+    }
+  }
 
   //useInterval hook sets an interval delay timer
   //useInterval1 sets starting values + engages animations on load
@@ -93,7 +154,6 @@ export default function GuestLanding(props) {
   useInterval(
     () => {
       if (count <= 10) {
-        
         setCount(count + 0.5);
       }
       if (count <= 1) {
@@ -138,7 +198,7 @@ export default function GuestLanding(props) {
         setCount2(count2 + 0.5);
       }
       if (count2 === 1) {
-        reflowBKG(bkg)
+        reflowBKG(bkg);
         reflowOne(enterCard);
         reflowOne(enterLogo);
       }
@@ -185,30 +245,33 @@ export default function GuestLanding(props) {
     count2
   );
 
- //Determines view to load for user based on view variable defined above
+  //Determines view to load for user based on view variable defined above
   //function called in GuestLanding return
   //call animReset() and send the desired view in via a string EX: "landing"
-  
-function GetView(view) {// Functional. Needs completion of ViewPosts
+
+  function GetView(view) {
+    // Functional. Needs completion of ViewPosts
     if (view === "landing") {
       return ViewLanding();
     } else if (view === "profile") {
       return ViewProfile();
-      // } else if (view === "posts") {
-      //   return ViewPosts();
+    } else if (view === "posts") {
+      return ViewPosts();
     } else {
       return ViewLanding();
     }
   }
 
-  
-  return (//Default Return Value augmented by ReturnView function
-    <span id="wallpaper" class= "bkg1 svgbkg" 
-    style={{
-      animationPlayState: `${iconPlayState}`,
-      animationDuration: `2.5s`
-    }}
-  >
+  return (
+    //Default Return Value augmented by ReturnView function
+    <span
+      id="wallpaper"
+      class="bkg1 svgbkg"
+      style={{
+        animationPlayState: `${iconPlayState}`,
+        animationDuration: `2.5s`
+      }}
+    >
       <div style={{ width: "100vw" }}>
         <div
           id="iconHolder"
@@ -236,14 +299,13 @@ function GetView(view) {// Functional. Needs completion of ViewPosts
         {GetView(view)}
       </div>
     </span>
-  )
-
- 
+  );
 
   //Each viewFunction() populates the default return with the necessary
   //elements to create the desired simulated "page"
 
-  function ViewProfile() { // 30% Needs: UserPosts, EditPosts
+  function ViewProfile() {
+    // 30% Needs: EditPosts
     return (
       <main>
         <div className="WelcomeSVGHolders">
@@ -266,11 +328,7 @@ function GetView(view) {// Functional. Needs completion of ViewPosts
               }}
             >
               <div className="welcomeBackHolder">
-              {isNewUser ? (
-                <NewUserLogo />
-              ) : (
-              <WelcomeLogo />
-              )}
+                {isNewUser ? <NewUserLogo /> : <WelcomeLogo />}
               </div>
             </h1>
           </div>
@@ -302,15 +360,10 @@ function GetView(view) {// Functional. Needs completion of ViewPosts
                   <br />
                   <br />
                   <Card2>
-                    
+                    <button onClick={() => AnimReset("posts")}>
+                      View Posts
+                    </button>
                   </Card2>
-                  <button
-                    onClick={() => {
-                      AnimReset("landing");
-                    }}
-                  >
-                    reset ALL ANIM to LANDING
-                  </button>
                 </div>
               </div>
             </div>
@@ -320,9 +373,8 @@ function GetView(view) {// Functional. Needs completion of ViewPosts
     );
   } /// Function closure
 
-
-
-  function ViewLanding() {// 100% - Includes: Landing, Login, Register. 
+  function ViewLanding() {
+    // 100% - Includes: Landing, Login, Register.
     return (
       <main>
         <div className="SVGHolders">
@@ -344,14 +396,12 @@ function GetView(view) {// Functional. Needs completion of ViewPosts
                 animationDuration: `1.5s`
               }}
             >
-              
               <LandingLogo />
             </div>
           </h1>
         </div>
 
         {isNewUser ? (
-          
           <div className="column">
             <div className="container">
               <div className="row">
@@ -374,16 +424,11 @@ function GetView(view) {// Functional. Needs completion of ViewPosts
                     }}
                   >
                     <Card2>
-                      <DashboardRegister AnimReset={AnimReset} setNewUser = {setNewUser} />
+                      <DashboardRegister
+                        AnimReset={AnimReset}
+                        setNewUser={setNewUser}
+                      />
                     </Card2>
-                    {/* <button
-                      onClick={() => {
-                        AnimReset("profile");
-                      }}
-                    >
-                      reset ALL ANIM to LANDING
-                    </button> */}
-                 
                   </div>
                 </div>
               </div>
@@ -412,30 +457,106 @@ function GetView(view) {// Functional. Needs completion of ViewPosts
                     }}
                   >
                     <Card2>
-                      <DashboardLogin AnimReset={AnimReset} setNewUser = {setNewUser} />
+                      <DashboardLogin
+                        AnimReset={AnimReset}
+                        setNewUser={setNewUser}
+                      />
                     </Card2>
-                    {/* <button
-                      onClick={() => {
-                        AnimReset("profile");
-                      }}
-                    >
-                      reset ALL ANIM to LANDING
-                    </button> */}
-                
                   </div>
                 </div>
               </div>
             </div>
           </div>
           //Ternary Closure
-        )}  
-        
+        )}
       </main> //Body closure
     ); //Return closure
   } //Function closure
 
-  
- 
-  function ViewPosts() {}// 0% -- Needs all
+  function ViewPosts() {
+    return (
+      <main>
+        <div className="WelcomeSVGHolders">
+          <div
+            id="logoExit"
+            className="welcomeLogoExit"
+            class="ld ld-power-off paused"
+            style={{
+              animationPlayState: `${profilePlayState.exit}`,
+              animationDuration: `0.7s`
+            }}
+          >
+            <h1
+              id="logoEnter"
+              className="welcomeLogoHolders"
+              class="ld ld-float-btt-in paused"
+              style={{
+                animationPlayState: `${profilePlayState.logo}`,
+                animationDuration: `1.5s`
+              }}
+            >
+              <div className="welcomeBackHolder">
+                {isNewUser ? <NewUserLogo /> : <WelcomeLogo />}
+              </div>
+            </h1>
+          </div>
+        </div>
+        <div className="column">
+          <div className="container">
+            <div className="row">
+              <div
+                id="cardEnter"
+                className="welcomeCardEnter"
+                class="ld ld-spring-ttb-in paused"
+                style={{
+                  animationPlayState: `${profilePlayState.card}`,
+                  animationDuration: `1s`
+                }}
+              >
+                <div
+                  id="cardExit"
+                  className="welcomeCardExit"
+                  class="ld ld-power-off paused"
+                  style={{
+                    animationPlayState: `${profilePlayState.exit}`,
+                    animationDuration: `0.5s`
+                  }}
+                >
+                  <Card2>
+                   
+                      <PostCard
+                        statePosts={statePosts}
+                        post={post}
+                        
+                      />
+                       <button onClick={randomize}>View your next pet</button>
+                  
+                  </Card2>
+                  <br />
+                  <br />
+                  <Card2>
+                    
+                      <PostCardUser
+                        statePostsUser={statePostsUser}
+                        userPost={userPost}
+                      
+                      />
+                      <button onClick={ownerCycle}>View your next pet</button>
+                      <div>
+                        <EditPost
+                          AnimReset={AnimReset}
+                          setView={setView}
+                          postId={statePostsUser[userPost].post_id}
+                        />
+                      </div>
+                   
+                  </Card2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
 }
-

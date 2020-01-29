@@ -67,7 +67,7 @@ app.get("/api/randposts/:amount",  getRandomPosts) //Works
 app.get("/api/posts/:category_name", allPostsByCategoryName) //Works
 app.get("/api/userposts/:user_id", getAllPostsByUserId) // Working Postman
 app.post("/api/posts",  addPost); //Works 
-app.put("/api/posts/:post_id",  editPost); //Works, allows edit img url and pet name
+app.put("/api/posts/:post_id",  editPost); //Works, allows edit pet name
 app.delete("/api/posts/:post_id",  deletePost); //Works
 
 // Ratings Endpoints

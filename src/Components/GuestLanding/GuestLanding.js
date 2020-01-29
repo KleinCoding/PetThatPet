@@ -230,7 +230,6 @@ function GetView(view) {// Functional. Needs completion of ViewPosts
               animationDuration: `2.5s`
             }}
           >
-            
             <CatPaw3 />
           </div>
         </div>
@@ -422,8 +421,7 @@ function GetView(view) {// Functional. Needs completion of ViewPosts
                     >
                       reset ALL ANIM to LANDING
                     </button> */}
-                    <br />
-                    <br />
+                
                   </div>
                 </div>
               </div>

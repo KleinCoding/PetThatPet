@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, lazy } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import { getAllPosts } from "../../reducks/reducers/postsReducer";
 import "./Landing.scss";
@@ -86,7 +86,6 @@ export default function GuestLanding(props) {
   //Hook used to set View for loading page based on needed view
   const [view, setView] = useState("landing");
   const [view2, setView2] = useState("");
-  const [viewPosts, setViewPosts] = useState(true);
 
   //Hook used to set view for Login or Register fields
   const [isNewUser, setNewUser] = useState(false);
@@ -96,7 +95,6 @@ export default function GuestLanding(props) {
   const exitCard = document.querySelector("#cardExit");
   const enterLogo = document.querySelector("#logoEnter");
   const exitLogo = document.querySelector("#logoExit");
-  const bkg = document.querySelector("#wallpaper");
 
   //Sets exit animations to run +
   //activates interval2
@@ -114,13 +112,6 @@ export default function GuestLanding(props) {
     forceReflowJS(cl);
     cl.classList.add("ld");
     console.log(count, count2, "reflowONE finished");
-  }
-
-  function reflowBKG(cl) {
-    cl.classList.remove("bkg1");
-    forceReflowJS(cl);
-    cl.classList.add("bkg2");
-    console.log(count, count2, "reflowBKG Finished");
   }
 
   function randomize() {
@@ -197,7 +188,6 @@ export default function GuestLanding(props) {
         setCount2(count2 + 0.5);
       }
       if (count2 === 1) {
-       
         reflowOne(enterCard);
         reflowOne(enterLogo);
       }
@@ -291,14 +281,12 @@ export default function GuestLanding(props) {
               animationPlayState: `${iconPlayState}`,
               animationDuration: `2.5s`
             }}
-            // onClick={setView("profile")}
           >
             <CatPaw3 />
           </div>
         </div>
         {GetView(view)}
       </div>
-      
     </span>
   );
 
@@ -306,7 +294,6 @@ export default function GuestLanding(props) {
   //elements to create the desired simulated "page"
 
   function ViewProfile() {
-    // 30% Needs: EditPosts
     return (
       <main>
         <div className="WelcomeSVGHolders">
@@ -524,33 +511,24 @@ export default function GuestLanding(props) {
                   }}
                 >
                   <Card2>
-                   
-                      <PostCard
-                        statePosts={statePosts}
-                        post={post}
-                        
-                      />
-                       <button onClick={randomize}>View another pet</button>
-                  
+                    <PostCard statePosts={statePosts} post={post} />
+                    <button onClick={randomize}>View another pet</button>
                   </Card2>
                   <br />
                   <br />
                   <Card2>
-                    
-                      <PostCardUser
-                        statePostsUser={statePostsUser}
-                        userPost={userPost}
-                      
+                    <PostCardUser
+                      statePostsUser={statePostsUser}
+                      userPost={userPost}
+                    />
+                    <button onClick={ownerCycle}>View your next pet</button>
+                    <div>
+                      <EditPost
+                        AnimReset={AnimReset}
+                        setView={setView}
+                        postId={statePostsUser[userPost].post_id}
                       />
-                      <button onClick={ownerCycle}>View your next pet</button>
-                      <div>
-                        <EditPost
-                          AnimReset={AnimReset}
-                          setView={setView}
-                          postId={statePostsUser[userPost].post_id}
-                        />
-                      </div>
-                   
+                    </div>
                   </Card2>
                 </div>
               </div>

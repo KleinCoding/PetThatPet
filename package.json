@@ -22,7 +22,6 @@
     "express-session": "^1.17.0",
     "fs": "0.0.1-security",
     "massive": "^6.1.4",
-    "node-rekognition": "^0.4.0",
     "node-sass": "^4.13.1",
     "react": "^16.12.0",
     "react-butterfiles": "^1.3.3",

@@ -24,7 +24,7 @@ const { SERVER_PORT, SESSION_SECRET, CONNECTION_STRING } = process.env;
 const auth = require('./middleware/authMiddleware');
 
 app.use(express.json());
-app.use(express.static(__dirname + '/../public'))
+app.use(express.static(__dirname + '/../build'))
 
 
 
